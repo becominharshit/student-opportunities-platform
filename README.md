@@ -1,7 +1,8 @@
 # Student Opportunities Platform
 
-C01 inspection and C02 foundation. No event inventory, authentication, database,
-source integration, calendar, or AI is implemented yet.
+C01/C02 foundation plus C03 database migrations, RLS and safe Supabase clients.
+No event inventory, authentication UI, source integration, calendar, or AI is implemented.
+See [C03 database guide](docs/c03-database.md) for schema, security and test details.
 
 ## Local development
 
@@ -22,8 +23,9 @@ npm start
 ```
 
 Build and typecheck both generate Next.js route types; run them sequentially.
-No automated test suite exists at C02. The production route is smoke-checked over
-HTTP; database security tests are required with C03.
+C03 checks: `npm test` replays migrations in isolated PGlite PostgreSQL and tests
+RLS/security; `npm run test:boundary` checks Next.js rejects privileged client
+imports; `npm run test:bundle` scans browser assets after building.
 
 ## Structure
 
@@ -45,15 +47,17 @@ Copy `.env.example` to `.env.local` only when configuring Supabase later.
 `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are public
 project settings. `SUPABASE_SERVICE_ROLE_KEY` is privileged and must remain in
 server/worker secret storage, never browser code or a NEXT_PUBLIC variable.
-None is read by the current app. No Supabase project has been linked, no clients
-are initialized, and no migrations have been added or applied.
+These values are read lazily by separate browser/user-context/server-service
+helpers. The holding page does not initialize clients. Three C03 migrations
+are replayed in isolated test databases; no hosted Supabase project is linked
+and no hosted migrations have been applied.
 
 ## Review boundary and risks
 
-Next: C03 canonical/auth-support migrations, constraints, indexes, explicit RLS,
-and isolated-database replay plus anonymous/user A/user B/admin access tests.
-An isolated Supabase environment is needed to verify that stage. Production
-region, accounts and deployment remain undecided. All live sources remain gated.
+C03 is the current review boundary; do not start C04 without the next instruction.
+Docker is unavailable on this host, so full local Supabase/PostgREST/Auth integration
+remains unverified. Production region, accounts and deployment remain undecided.
+All live sources remain gated.
 
 All direct dependencies and the lockfile are pinned. ESLint 9.39.5 is deprecated
 but compatible with Next 16.3.5's bundled React/import/accessibility plugins;
