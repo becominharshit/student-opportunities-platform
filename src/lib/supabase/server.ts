@@ -6,9 +6,8 @@ import type { Database } from "./database.types";
 import { getPublicSupabaseEnv } from "./public-env";
 
 /**
- * Per-request user-context client. C04 must supply a response cookie/header
- * writer for auth mutation/refresh, and verify identity with getClaims/getUser.
- * Cookie-writing errors are never silently swallowed.
+ * Read-only Server Component context after Proxy refresh. Route handlers use
+ * request.ts to persist every cookie/header. Cookie-writing errors fail closed.
  */
 export async function createServerSupabaseClient(writeCookies?: SetAllCookies) {
   const cookieStore = await cookies();
@@ -23,4 +22,3 @@ export async function createServerSupabaseClient(writeCookies?: SetAllCookies) {
     },
   });
 }
-

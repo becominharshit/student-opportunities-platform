@@ -70,7 +70,7 @@ test("real local secrets are untracked and absent from Git history", async () =>
   let env;
   try { env=parseEnv(await readFile(new URL(".env.local",root),"utf8")); }
   catch(e) { if(e.code==="ENOENT") return; throw e; }
-  const secrets=[env.SUPABASE_SECRET_KEY,env.SUPABASE_SERVICE_ROLE_KEY].filter(Boolean);
+  const secrets=[env.SUPABASE_SECRET_KEY,env.SUPABASE_SERVICE_ROLE_KEY,env.AUTH_COOKIE_SECRET].filter(Boolean);
   for(const secret of secrets) {
     for(const file of tracked) assert.ok(!(await readFile(new URL(file,root))).includes(Buffer.from(secret)),"A tracked file contains a real secret");
     const history=execFileSync("git",["log","--all","-p"],{maxBuffer:20*1024*1024});

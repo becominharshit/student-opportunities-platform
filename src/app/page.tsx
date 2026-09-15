@@ -7,6 +7,9 @@ export default function Home() {
         We’re building a place to discover student technology events and understand
         their requirements. Opportunity listings are not available yet.
       </p>
+      <nav aria-label="Account" className="mt-8 flex gap-6 underline">
+        <a href="/login">Sign in</a><a href="/signup">Create account</a>
+      </nav>
     </main>
   );
 }

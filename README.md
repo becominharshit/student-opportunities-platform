@@ -1,7 +1,9 @@
 # Student Opportunities Platform
 
 C01/C02 foundation plus C03 database migrations, RLS and safe Supabase clients.
-No event inventory, authentication UI, source integration, calendar, or AI is implemented.
+C04 adds minimal authentication pages, protected account/admin destinations and session refresh.
+No event inventory, source integration, calendar, or AI is implemented.
+See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
 See [C03 database guide](docs/c03-database.md) for schema, security and test details.
 See [latest C03 security verification](docs/c03-final-security-verification.md) for the current credential gate.
 
@@ -14,7 +16,8 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. No environment values are needed for this stage.
+Open http://localhost:3000. The holding page needs no environment values; authentication
+requires the Supabase settings, APP_URL and AUTH_COOKIE_SECRET described in the C04 guide.
 
 ```sh
 npm run build
@@ -56,7 +59,7 @@ there is no fallback to the legacy variable name.
 
 ## Review boundary and risks
 
-C03 is the current review boundary; do not start C04 without the next instruction.
+C04 received final sign-off on 16 September 2026, including actual received signup and recovery emails. See docs/c04-inbox-smoke-review.md for evidence and public-launch limitations. Do not start C05 without the next instruction.
 Hosted Supabase/Auth/PostgREST verification passed. Docker is unavailable for the
 full local Supabase stack. Full C03 security sign-off was granted on 15 September
 2026 after all historical credential checks rejected access and validation passed;

@@ -17,7 +17,7 @@ async function scan(dir) {
       count++;
       const content=await readFile(url);
       for(const secret of secrets) assert.ok(!content.includes(Buffer.from(secret)),"Private environment value detected in browser output");
-      for (const name of ["SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY"]) {
+      for (const name of ["SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY", "AUTH_COOKIE_SECRET"]) {
         assert.ok(!content.includes(Buffer.from(name)),"Privileged variable reference detected in browser output");
       }
     }

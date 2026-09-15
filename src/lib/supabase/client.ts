@@ -6,6 +6,7 @@ import { getPublicSupabaseEnv } from "./public-env";
 
 export function createBrowserSupabaseClient() {
   const { url, key } = getPublicSupabaseEnv();
-  return createBrowserClient<Database>(url, key);
+  return createBrowserClient<Database>(url, key, {
+    cookieOptions: { path: "/", sameSite: "lax", secure: typeof window !== "undefined" && window.location.protocol === "https:" },
+  });
 }
-
