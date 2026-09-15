@@ -19,10 +19,12 @@ async function sourceFiles(dir) {
 test("service client is guarded, sessionless, and the only source reading service credentials", async () => {
   const service=await readFile(new URL("src/lib/supabase/service.ts",root),"utf8");
   assert.match(service,/import "server-only"/);
+  assert.match(service,/process\.env\.SUPABASE_SECRET_KEY/);
+  assert.ok(!service.includes("SUPABASE_SERVICE_ROLE_KEY"), "Legacy variable must not be used as a fallback");
   for(const setting of ["persistSession","autoRefreshToken","detectSessionInUrl"]) assert.match(service,new RegExp(setting+": false"));
   for(const file of await sourceFiles(new URL("src/",root))) {
     if(file.pathname.endsWith("/service.ts")) continue;
-    assert.ok(!(await readFile(file,"utf8")).includes("SUPABASE_SERVICE_ROLE_KEY"),"Privileged env access outside service module");
+    assert.ok(!/SUPABASE_(SECRET_KEY|SERVICE_ROLE_KEY)/.test(await readFile(file,"utf8")),"Privileged env access outside service module");
   }
 });
 test("client import graph cannot reach service/server modules", async () => {
@@ -68,8 +70,8 @@ test("real local secrets are untracked and absent from Git history", async () =>
   let env;
   try { env=parseEnv(await readFile(new URL(".env.local",root),"utf8")); }
   catch(e) { if(e.code==="ENOENT") return; throw e; }
-  const secret=env.SUPABASE_SERVICE_ROLE_KEY;
-  if(secret) {
+  const secrets=[env.SUPABASE_SECRET_KEY,env.SUPABASE_SERVICE_ROLE_KEY].filter(Boolean);
+  for(const secret of secrets) {
     for(const file of tracked) assert.ok(!(await readFile(new URL(file,root))).includes(Buffer.from(secret)),"A tracked file contains a real secret");
     const history=execFileSync("git",["log","--all","-p"],{maxBuffer:20*1024*1024});
     assert.ok(!history.includes(Buffer.from(secret)),"Git history contains a real secret");

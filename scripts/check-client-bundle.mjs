@@ -17,11 +17,12 @@ async function scan(dir) {
       count++;
       const content=await readFile(url);
       for(const secret of secrets) assert.ok(!content.includes(Buffer.from(secret)),"Private environment value detected in browser output");
-      assert.ok(!content.includes(Buffer.from("SUPABASE_SERVICE_ROLE_KEY")),"Privileged variable reference detected in browser output");
+      for (const name of ["SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY"]) {
+        assert.ok(!content.includes(Buffer.from(name)),"Privileged variable reference detected in browser output");
+      }
     }
   }
 }
 await scan(new URL(".next/static/",root));
 assert.ok(count>0,"No built client assets found");
 console.log("PASS: "+count+" browser assets scanned; no private environment values or service-key references.");
-

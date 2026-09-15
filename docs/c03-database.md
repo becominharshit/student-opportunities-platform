@@ -1,5 +1,10 @@
 # C03 database foundation
 
+Current status: hosted integration has been verified. See
+[latest credential verification](c03-final-security-verification.md) for the
+completed security sign-off and the migration to `SUPABASE_SECRET_KEY`.
+The local-only limitations recorded below describe the initial C03 checkpoint.
+
 C03 only. The C01/C02 base is committed as df7aa57. No C04 auth UI, auth routes,
 session-refresh proxy, ingestion, calendar, AI or event CRUD endpoints are added.
 The homepage still makes no database requests.
@@ -117,7 +122,7 @@ were not displayed. It is ignored, untracked, and checked against Git history.
 
 - NEXT_PUBLIC_SUPABASE_URL: project API URL.
 - NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: publishable key or legacy anon JWT.
-- SUPABASE_SERVICE_ROLE_KEY: privileged key, read only in service.ts.
+- SUPABASE_SECRET_KEY: privileged key, read only in service.ts.
 
 No new secret variable is needed for tests, migration replay or the holding page.
 HTTP API keys are not PostgreSQL migration credentials. Hosted deployment will
@@ -188,4 +193,3 @@ the three additive migrations to a hosted environment.
 C03 implementation and isolated PostgreSQL/security verification are complete.
 Full Supabase integration verification remains an explicit pre-rollout gate;
 no Auth/PostgREST/hosted pass is claimed. Stop at this review boundary.
-
