@@ -2,7 +2,8 @@
 
 C01/C02 foundation plus C03 database migrations, RLS and safe Supabase clients.
 C04 adds minimal authentication pages, protected account/admin destinations and session refresh.
-No event inventory, source integration, calendar, or AI is implemented.
+C05 adds canonical event management; C06 adds public Explore and Event Detail.
+No automated source integration, calendar, or AI is implemented.
 See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
 See [C03 database guide](docs/c03-database.md) for schema, security and test details.
 See [latest C03 security verification](docs/c03-final-security-verification.md) for the current credential gate.
@@ -59,7 +60,7 @@ there is no fallback to the legacy variable name.
 
 ## Review boundary and risks
 
-C04 received final sign-off on 16 September 2026, including actual received signup and recovery emails. See docs/c04-inbox-smoke-review.md for evidence and public-launch limitations. Do not start C05 without the next instruction.
+C04 received final sign-off on 16 September 2026, including actual received signup and recovery emails. See docs/c04-inbox-smoke-review.md for evidence and public-launch limitations. C05 was subsequently approved and committed; see the current PROJECT_STATE.md.
 Hosted Supabase/Auth/PostgREST verification passed. Docker is unavailable for the
 full local Supabase stack. Full C03 security sign-off was granted on 15 September
 2026 after all historical credential checks rejected access and validation passed;
@@ -77,4 +78,23 @@ C05 event services and protected admin management are implemented; see
 [the C05 review](docs/section-36-c05-review.md) for behavior, validation and limitations.
 The additive C05 transaction function is applied to the linked hosted project.
 Run `npm run test:events` for isolated event lifecycle/RLS coverage.
-Changes remain uncommitted for review. C06 has not started.
+C05 was approved and pushed as bddab781ce57db1b3400bf8e8e8b011d5e597336.
+
+## C06 review checkpoint
+
+Public `/explore` and `/events/[slug]` are implemented with anonymous published-only
+reads, 24-item keyset pagination and explicit missing-information labels. No new
+environment settings or migrations. See [C06 review](docs/section-36-c06-review.md)
+and [current project state](PROJECT_STATE.md). Changes remain uncommitted for approval.
+
+Additional validation:
+```sh
+npm run test:public
+npx playwright install chromium
+npm run build
+npm run test:public:ui
+npm run test:public:hosted
+```
+The browser fixture test requires the production CSS build. It uses only isolated
+synthetic data. The hosted C06 smoke command is read-only and reports whether
+genuine inventory or the empty state was checked. It does not seed production.
