@@ -70,3 +70,11 @@ All direct dependencies and the lockfile are pinned. ESLint 9.39.5 is deprecated
 but compatible with Next 16.3.5's bundled React/import/accessibility plugins;
 ESLint 10 produced invalid peer dependencies. Revisit when that upstream plugin
 set supports ESLint 10. Do not bypass peer checks with force/legacy-peer-deps.
+
+## C05 review checkpoint
+
+C05 event services and protected admin management are implemented; see
+[the C05 review](docs/section-36-c05-review.md) for behavior, validation and limitations.
+The additive C05 transaction function is applied to the linked hosted project.
+Run `npm run test:events` for isolated event lifecycle/RLS coverage.
+Changes remain uncommitted for review. C06 has not started.

@@ -11,12 +11,13 @@
     "db:start": "supabase start",
     "db:types": "node scripts/generate-db-types.mjs",
     "test:bundle": "node scripts/check-client-bundle.mjs",
-    "test": "node --test tests/database/c03.test.mjs tests/security.test.mjs tests/auth.test.mjs tests/auth-handlers.test.mjs",
+    "test": "node --test tests/database/c03.test.mjs tests/security.test.mjs tests/auth.test.mjs tests/auth-handlers.test.mjs tests/events/c05.test.mjs",
     "test:boundary": "node scripts/test-server-boundary.mjs",
     "db:types:check": "node scripts/generate-db-types.mjs --check",
     "db:reset:local": "supabase db reset --local",
     "test:db": "node --test tests/database/c03.test.mjs",
-    "test:auth:hosted": "node scripts/test-c04-hosted.mjs"
+    "test:auth:hosted": "node scripts/test-c04-hosted.mjs",
+    "test:events": "node --test tests/events/c05.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

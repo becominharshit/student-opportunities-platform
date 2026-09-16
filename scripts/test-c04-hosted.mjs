@@ -81,6 +81,12 @@ try {
   check(account.status === 200 && account.body.includes(a.email) && !account.body.includes(b.email), "server resolves own account and does not expose user B");
   check(account.cache?.includes("no-store"), "private page is not shared-cacheable");
   check((await browserA.request("/admin")).location?.includes("forbidden"), "editable metadata cannot grant admin route access");
+  for (const action of ["create","update","publish"]) {
+    check((await browserA.request("/admin/events/mutate", {action,reason:"Unauthorized C05 probe"})).status === 403, "ordinary user denied C05 " + action + " at mutation endpoint");
+  }
+  check((await anon.request("/admin/events/mutate", {action:"create",reason:"Anonymous C05 probe"})).status === 401, "anonymous C05 mutation denied");
+  check((await anon.request("/admin/events/mutate", {action:"create"}, {origin:"https://evil.invalid"})).status === 403, "C05 cross-origin form rejected");
+
   check((await browserA.request("/login")).location?.endsWith("/account"), "already authenticated login redirects");
   check((await browserA.request("/auth/reset-password", { password: changedPassword, confirm_password: changedPassword })).location?.includes("invalid_link"), "ordinary login cannot authorize recovery reset");
   await login(browserB, b);
@@ -92,6 +98,15 @@ try {
   check(!membership.error, "test admin provisioned through privileged membership only");
   await login(staffBrowser, staff);
   check((await staffBrowser.request("/admin")).status === 200, "protected member accesses administrator route");
+  const createPage = await staffBrowser.request("/admin/events/new");
+  check(createPage.status === 200 && createPage.body.includes("Create draft") && createPage.body.includes('name="date_precision"'), "administrator event form renders canonical inputs");
+  const staffClient = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {auth:{persistSession:false,autoRefreshToken:false}});
+  const staffLogin = await staffClient.auth.signInWithPassword({email:staff.email,password});
+  check(!staffLogin.error, "C05 RPC probe uses authenticated admin context");
+  const probe = await staffClient.rpc("mutate_event", {command:{action:"publish",id:randomUUID(),expected_version:1,reason:"Read-only nonexistent event probe"}});
+  check(probe.error?.code === "P0504", "hosted C05 RPC installed and returns safe not-found code without event writes");
+  await staffClient.auth.signOut({scope:"local"});
+
   await admin.from("admin_memberships").delete().eq("user_id", staff.id);
   check((await staffBrowser.request("/admin")).location?.includes("forbidden"), "membership revocation immediately removes route access");
   const profile = await admin.from("profiles").select("name,institution,country").eq("user_id", a.id).single();
