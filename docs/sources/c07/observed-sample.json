@@ -1,0 +1,20 @@
+{
+  "kind": "research-only factual projection, not seed data",
+  "observed_at": "2026-09-16T11:12:42.405Z",
+  "source": "https://fossunited.org/api/method/fossunited.api.chapter.upcoming_events_ics",
+  "attribution": "FOSS United",
+  "licence": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "adaptation": "Selected factual fields only; descriptions and media omitted",
+  "event": {
+    "UID": "8gvgrio08u",
+    "SUMMARY": "Workshops @ IndiaFOSS 2026",
+    "CATEGORIES": "Workshop",
+    "DTSTART": "20260925T043000Z",
+    "DTEND": "20260925T113000Z",
+    "URL": "https://fossunited.org/c/indiafoss/2026/workshops"
+  },
+  "page_observation": {
+    "registration_anchor": "https://fossunited.org/dashboard/buy-tickets?event=8gvgrio08u",
+    "note": "Explicit page anchor observed; not fetched as a purchase flow. No blanket registration verification."
+  }
+}

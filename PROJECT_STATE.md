@@ -4,10 +4,10 @@ Updated 16 September 2026.
 
 - Product authority: docs/planning/student_opportunities_master_instructions.md.
 - Implementation baseline: docs/planning/section-35-planning-package.md.
-- C01–C05: complete, approved and committed/pushed to main.
-- Latest approved commit: bddab781ce57db1b3400bf8e8e8b011d5e597336 (C05).
-- C06: implemented and validated; uncommitted, awaiting review approval.
-- Current review: docs/section-36-c06-review.md.
+- C01–C06: complete, approved and committed/pushed to main.
+- Latest implementation commit before C07 documentation: a2972aac4151e9f7766218d4597816cdc28ddabe (C06).
+- C07: research review approved by the user; first-source activation and release source-count gates remain open.
+- Current review: docs/section-36-c07-review.md. C06 review status was superseded by user approval and commit.
 - C03 current security result: docs/c03-final-security-verification.md (supersedes older blocked reports).
 - C04 current result: docs/section-36-c04-review.md and docs/c04-inbox-smoke-review.md.
 - C05 review: docs/section-36-c05-review.md (its uncommitted status is historical; C05 was subsequently committed).
@@ -16,4 +16,4 @@ C06 adds public Explore and event details using anonymous RLS reads, stable 24-i
 
 .env.local is ignored/untracked. Never display secrets or commit local configuration. Use SUPABASE_SECRET_KEY only in the existing server-only helper.
 
-No connector, source qualification, filtering, recommendations, profile, calendar, notification, AI or organizer-submission implementation was added in C06. C07 has not started. Do not commit/push C06 before approval or advance stages automatically.
+No connector, source qualification, filtering, recommendations, profile, calendar, notification, AI or organizer-submission implementation was added in C06. C07 researched 15 distinct candidates; no production connector was added. FOSS United is the conditional first recommendation. See docs/sources/c07/qualification.md and first-connector.md. No fully unconditional source approval is claimed. Do not begin C08 automatically.

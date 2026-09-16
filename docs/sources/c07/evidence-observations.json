@@ -1,0 +1,218 @@
+[
+  {
+    "url": "https://devpost.com/robots.txt",
+    "final_url": "https://devpost.com/robots.txt",
+    "status": 200,
+    "content_type": "text/plain",
+    "checked_at": "2026-09-16T04:15:41.804Z",
+    "sha256": "e7bcdfc5b10c8da43da8b00f9dbefca45f14526b41704d00140029bcda4f635b"
+  },
+  {
+    "url": "https://unstop.com/robots.txt",
+    "final_url": "https://unstop.com/robots.txt",
+    "status": 200,
+    "content_type": "text/plain",
+    "checked_at": "2026-09-16T04:15:37.632Z",
+    "sha256": "2904c1431ff95bbd5d93bd3373c5670f9d6f979d1bd74cfa89f36f8aa9ffd2c4"
+  },
+  {
+    "url": "https://devfolio.co/robots.txt",
+    "final_url": "https://devfolio.co/robots.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=UTF-8",
+    "checked_at": "2026-09-16T04:15:37.982Z",
+    "sha256": "e5c4b84484ee4216e9373be99380320c25dd94805f99f0a805846f087636553f"
+  },
+  {
+    "url": "https://www.hackerearth.com/robots.txt",
+    "final_url": "https://www.hackerearth.com/robots.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "checked_at": "2026-09-16T04:15:44.529Z",
+    "sha256": "a12930b7e7f61fd4fef0909cd30426a2b71c45483b6533e14f0f92cdd55c15f6"
+  },
+  {
+    "url": "https://mlh.io/robots.txt",
+    "final_url": "https://www.mlh.com/robots.txt",
+    "status": 200,
+    "content_type": "text/plain",
+    "checked_at": "2026-09-16T04:15:47.643Z",
+    "sha256": "b50e2c4683ac497e4db8b1574b43e3b5c9aec633dfedfa096852625f3ecba574"
+  },
+  {
+    "url": "https://fossunited.org/robots.txt",
+    "final_url": "https://fossunited.org/robots.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "checked_at": "2026-09-16T04:15:44.705Z",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "url": "https://confs.tech/robots.txt",
+    "final_url": "https://confs.tech/robots.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "checked_at": "2026-09-16T04:15:53.993Z",
+    "sha256": "b4731d1c068bcb968833f9b531e792029df0f5e7bae83d0a873a65b35935e2b6"
+  },
+  {
+    "url": "https://api.github.com/robots.txt",
+    "final_url": "https://api.github.com/robots.txt",
+    "status": 404,
+    "content_type": "application/json; charset=utf-8",
+    "checked_at": "2026-09-16T04:15:51.282Z",
+    "sha256": "edbd0367cec893df36f67acb56c3aa23810be28850977c35e0fedaf64aad286b"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/robots.txt",
+    "final_url": "https://raw.githubusercontent.com/robots.txt",
+    "status": 404,
+    "content_type": "text/plain; charset=utf-8",
+    "checked_at": "2026-09-16T04:15:51.022Z",
+    "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed"
+  },
+  {
+    "url": "https://foss.events/robots.txt",
+    "final_url": "https://foss.events/robots.txt",
+    "status": 404,
+    "content_type": "text/html; charset=utf-8",
+    "checked_at": "2026-09-16T04:15:58.634Z",
+    "sha256": "ddfdc73004212c7251616c6cfd675d863bd8d3912c1a7ee9de5683e0560db9ea"
+  },
+  {
+    "url": "https://www.iitb.ac.in/robots.txt",
+    "status": null,
+    "error": "request_failed_or_timeout"
+  },
+  {
+    "url": "https://www.iitm.ac.in/robots.txt",
+    "final_url": "https://www.iitm.ac.in/robots.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=UTF-8",
+    "checked_at": "2026-09-16T04:15:59.184Z",
+    "sha256": "b6465bf85f3491d7cc48832375d0205afc31dda755e0297183e19eefcdc44cc3"
+  },
+  {
+    "url": "https://developers.google.com/robots.txt",
+    "final_url": "https://developers.google.com/robots.txt",
+    "status": 200,
+    "content_type": "text/plain",
+    "checked_at": "2026-09-16T04:16:09.329Z",
+    "sha256": "2d1ba1920a0abea6cc98c20c6e461c379f6582740e0a6bd2a852dcb762edcdba"
+  },
+  {
+    "url": "https://www.sih.gov.in/robots.txt",
+    "final_url": "https://www.sih.gov.in/robots.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=UTF-8",
+    "checked_at": "2026-09-16T04:16:08.601Z",
+    "sha256": "e5c4b84484ee4216e9373be99380320c25dd94805f99f0a805846f087636553f"
+  },
+  {
+    "url": "https://secure.mygov.in/robots.txt",
+    "final_url": "https://secure.mygov.in/robots.txt",
+    "status": 200,
+    "content_type": "text/plain",
+    "checked_at": "2026-09-16T04:16:09.120Z",
+    "sha256": "ff7a284b675f5ec3416cebdaae5bdafb39eb43a6ae3ee10f7efde74a858e7dad"
+  },
+  {
+    "name": "foss-ics",
+    "url": "https://fossunited.org/api/method/fossunited.api.chapter.upcoming_events_ics",
+    "final_url": "https://fossunited.org/api/method/fossunited.api.chapter.upcoming_events_ics",
+    "status": 200,
+    "checked_at": "2026-09-16T11:12:42.405Z",
+    "type": "text/calendar; charset=utf-8; charset=utf-8",
+    "bytes": 13476,
+    "sha256": "101dda80c6d632d5e45ccf64422441cd733844ed48c547cd3d05edfc0fc7229c",
+    "etag": null,
+    "last_modified": null,
+    "rate_limit": "28800000000"
+  },
+  {
+    "name": "foss-rss",
+    "url": "https://fossunited.org/events/timeline/rss.xml",
+    "final_url": "https://fossunited.org/events/timeline/rss.xml",
+    "status": 200,
+    "checked_at": "2026-09-16T11:12:44.250Z",
+    "type": "application/xml; charset=utf-8",
+    "bytes": 26578,
+    "sha256": "185a14bb4f7edc01ed911bd6763ad9215a85da7b27328c457fa193cd8f982697",
+    "etag": null,
+    "last_modified": null,
+    "rate_limit": "28800000000"
+  },
+  {
+    "name": "confs-year",
+    "url": "https://api.github.com/repos/tech-conferences/conference-data/contents/conferences/2026",
+    "final_url": "https://api.github.com/repos/tech-conferences/conference-data/contents/conferences/2026",
+    "status": 200,
+    "checked_at": "2026-09-16T11:12:45.373Z",
+    "type": "application/json; charset=utf-8",
+    "bytes": 28567,
+    "sha256": "ad53cfb0090b2d859bd0a8c643336e0807a5f92c922b025902b04cc95267a2cd",
+    "etag": "\"8fed034429808beadd50e6b7f3dccadf0dacb0a7\"",
+    "last_modified": "Thu, 10 Sep 2026 10:03:34 GMT",
+    "rate_limit": "60"
+  },
+  {
+    "name": "confs-license",
+    "url": "https://raw.githubusercontent.com/tech-conferences/conference-data/main/LICENSE.md",
+    "final_url": "https://raw.githubusercontent.com/tech-conferences/conference-data/main/LICENSE.md",
+    "status": 200,
+    "checked_at": "2026-09-16T11:12:46.966Z",
+    "type": "text/plain; charset=utf-8",
+    "bytes": 1023,
+    "sha256": "fd80a26fbb3f644af1fa994134446702932968519797227e07a1368dea80f0bc",
+    "etag": "W/\"19bdfabb050e30e6b40f188fcf7a7cb91681bb3775838fb531a62a25b89a129a\"",
+    "last_modified": null,
+    "rate_limit": null
+  },
+  {
+    "name": "foss-code",
+    "url": "https://raw.githubusercontent.com/fossunited/fossunited/develop/fossunited/api/chapter.py",
+    "status": 200,
+    "checked_at": "2026-09-16T11:14:05.684Z",
+    "sha256": "666ffb1c6b109f165708c2289a36393f493511e9e7c06b4755280835a4ebe637"
+  },
+  {
+    "name": "confs-python",
+    "url": "https://raw.githubusercontent.com/tech-conferences/conference-data/main/conferences/2026/python.json",
+    "status": 200,
+    "checked_at": "2026-09-16T11:14:06.034Z",
+    "sha256": "0dc386692adbdcb7750612ad2246832b737c87aff764eda19a136b9b09e5663d"
+  },
+  {
+    "name": "imagine-robots",
+    "url": "https://imaginecup.microsoft.com/robots.txt",
+    "status": 403,
+    "checked_at": "2026-09-16T11:14:08.347Z",
+    "sha256": "4184225e3736d81852e007df59043ad27e28fc0c4f80ab5d0f013c1be8a85580"
+  },
+  {
+    "name": "hack2skill-robots",
+    "url": "https://hack2skill.com/robots.txt",
+    "status": 200,
+    "checked_at": "2026-09-16T11:14:08.891Z",
+    "sha256": "dd46dae205e36001086f80c049a554e9b938d6aab5b821d46823b7beb84ed876"
+  },
+  {
+    "name": "sih-home",
+    "url": "https://www.sih.gov.in/",
+    "status": 200,
+    "checked_at": "2026-09-16T11:14:09.929Z",
+    "sha256": "d8d073785c524014b7a5aceed197222b6e0376070f0f450db91c057b1f258c84"
+  },
+  {
+    "url": "https://fossunited.org/terms-of-service",
+    "status": 200,
+    "checked_at": "2026-09-16T11:20:47.470Z",
+    "sha256": "e1bb8512b2ed4b09d0ca34f296fac710f1582427dd6b08a3f86add9b5072adab"
+  },
+  {
+    "url": "https://docs.fossunited.org/rss/",
+    "status": 200,
+    "checked_at": "2026-09-16T11:20:48.548Z",
+    "sha256": "19477593ac96d2bddb91132265d7576c3328cf0414e1d59ecb79b41a9f029758"
+  }
+]
