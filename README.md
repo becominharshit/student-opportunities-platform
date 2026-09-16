@@ -85,7 +85,7 @@ C05 was approved and pushed as bddab781ce57db1b3400bf8e8e8b011d5e597336.
 Public `/explore` and `/events/[slug]` are implemented with anonymous published-only
 reads, 24-item keyset pagination and explicit missing-information labels. No new
 environment settings or migrations. See [C06 review](docs/section-36-c06-review.md)
-and [current project state](PROJECT_STATE.md). Changes remain uncommitted for approval.
+and [current project state](PROJECT_STATE.md). C06 was approved and committed.
 
 Additional validation:
 ```sh
@@ -98,3 +98,11 @@ npm run test:public:hosted
 The browser fixture test requires the production CSS build. It uses only isolated
 synthetic data. The hosted C06 smoke command is read-only and reports whether
 genuine inventory or the empty state was checked. It does not seed production.
+
+## C08 review checkpoint
+
+Generic server-only fetch/connector infrastructure is implemented with synthetic tests.
+No real source is registered or enabled. See [C08 architecture](docs/c08-connector-infrastructure.md)
+and [C08 review](docs/section-36-c08-review.md). Run `npm run test:connectors` for isolated security/lease/replay coverage.
+The additive C08 migration is local-only and has not been applied to hosted Supabase.
+C09 has not started; C08 changes await review before commit/push.

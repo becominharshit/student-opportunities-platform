@@ -11,3 +11,11 @@ $$;
 grant usage on schema auth to anon, authenticated, service_role;
 grant execute on function auth.uid() to anon, authenticated, service_role;
 
+-- Storage schema contract only; object delivery/upload HTTP is mocked separately.
+create schema storage;
+create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text references storage.buckets(id),name text);
+alter table storage.objects enable row level security;
+grant usage on schema storage to anon,authenticated,service_role;
+grant select,insert,update,delete on storage.objects to anon,authenticated,service_role;
+grant select on storage.buckets to service_role;

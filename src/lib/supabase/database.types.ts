@@ -26,6 +26,92 @@ export type Database = { public: {
 
       ];
     };
+    connector_evidence: {
+      Row: {
+        id: string;
+        connector_id: string;
+        run_id: string;
+        external_id: string;
+        source_url: string;
+        content_hash: string;
+        parser_version: string;
+        storage_path: string;
+        content_type: string;
+        byte_count: number;
+        fetched_at: string;
+        expires_at: string;
+        created_at: string;
+      };
+      Insert: {
+        id?: string;
+        connector_id: string;
+        run_id: string;
+        external_id: string;
+        source_url: string;
+        content_hash: string;
+        parser_version: string;
+        storage_path: string;
+        content_type: string;
+        byte_count: number;
+        fetched_at: string;
+        expires_at: string;
+        created_at?: string;
+      };
+      Update: {
+        id?: string;
+        connector_id?: string;
+        run_id?: string;
+        external_id?: string;
+        source_url?: string;
+        content_hash?: string;
+        parser_version?: string;
+        storage_path?: string;
+        content_type?: string;
+        byte_count?: number;
+        fetched_at?: string;
+        expires_at?: string;
+        created_at?: string;
+      };
+      Relationships: [
+        { foreignKeyName: "connector_evidence_connector_id_fkey"; columns: ["connector_id"]; isOneToOne: false; referencedRelation: "source_connectors"; referencedColumns: ["id"] },
+        { foreignKeyName: "connector_evidence_run_id_fkey"; columns: ["run_id"]; isOneToOne: false; referencedRelation: "sync_runs"; referencedColumns: ["id"] },
+      ];
+    };
+    connector_host_budgets: {
+      Row: {
+        host: string;
+        window_start: string;
+        requests: number;
+        daily_limit: number;
+        min_interval_ms: number;
+        next_request_at: string;
+        holder: string | null;
+        held_until: string | null;
+      };
+      Insert: {
+        host: string;
+        window_start: string;
+        requests?: number;
+        daily_limit: number;
+        min_interval_ms: number;
+        next_request_at?: string;
+        holder?: string | null;
+        held_until?: string | null;
+      };
+      Update: {
+        host?: string;
+        window_start?: string;
+        requests?: number;
+        daily_limit?: number;
+        min_interval_ms?: number;
+        next_request_at?: string;
+        holder?: string | null;
+        held_until?: string | null;
+      };
+      Relationships: [
+
+      ];
+    };
     duplicate_reviews: {
       Row: {
         id: string;
@@ -675,6 +761,11 @@ export type Database = { public: {
         error_summary: string | null;
         item_errors: Json | null;
         error_overflow_ref: string | null;
+        lease_token: string | null;
+        fencing_token: number | null;
+        parser_version: string | null;
+        policy_snapshot: Json | null;
+        request_count: number;
       };
       Insert: {
         id?: string;
@@ -691,6 +782,11 @@ export type Database = { public: {
         error_summary?: string | null;
         item_errors?: Json | null;
         error_overflow_ref?: string | null;
+        lease_token?: string | null;
+        fencing_token?: number | null;
+        parser_version?: string | null;
+        policy_snapshot?: Json | null;
+        request_count?: number;
       };
       Update: {
         id?: string;
@@ -707,6 +803,11 @@ export type Database = { public: {
         error_summary?: string | null;
         item_errors?: Json | null;
         error_overflow_ref?: string | null;
+        lease_token?: string | null;
+        fencing_token?: number | null;
+        parser_version?: string | null;
+        policy_snapshot?: Json | null;
+        request_count?: number;
       };
       Relationships: [
         { foreignKeyName: "sync_runs_connector_id_fkey"; columns: ["connector_id"]; isOneToOne: false; referencedRelation: "source_connectors"; referencedColumns: ["id"] },
@@ -762,6 +863,7 @@ export type Database = { public: {
     };
   };
   Functions: {
+    connector_runtime: { Args: { command: Json }; Returns: Json };
     mutate_event: { Args: { command: Json }; Returns: Json };
   };
   Enums: { [_ in never]: never };

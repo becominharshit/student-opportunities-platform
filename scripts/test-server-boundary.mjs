@@ -23,4 +23,17 @@ assert.notEqual(status,0,"Unsafe fixture unexpectedly built");
 assert.match(output,/server-only/);
 assert.match(output,/Client Component|use client|Server Component/);
 console.log("PASS: Next.js rejected a Client Component importing the actual service client.");
+await mkdir(fixture+"/app/connectors");
+for(const name of ["contracts","errors","policy","transport","fetcher"]){await copyFile(new URL("src/lib/connectors/"+name+".ts",root),fixture+"/app/connectors/"+name+".ts");}
+await writeFile(fixture+"/app/page.tsx",'"use client";\nimport {BoundedFetcher} from "./connectors/fetcher";\nexport default function Page(){return <span>{BoundedFetcher.name}</span>;}');
+output="";
+const connectorStatus=await new Promise((resolve,reject)=>{
+  const child=spawn(process.execPath,[fileURLToPath(new URL("node_modules/next/dist/bin/next",root)),"build",fixture],{windowsHide:true,timeout:60000});
+  child.stdout.on("data",x=>output+=x); child.stderr.on("data",x=>output+=x);
+  child.on("error",reject); child.on("close",resolve);
+});
+assert.notEqual(connectorStatus,0,"Unsafe connector fixture unexpectedly built");
+assert.match(output,/server-only/);
+assert.match(output,/Client Component|use client|Server Component/);
+console.log("PASS: Next.js rejected a Client Component importing the actual connector fetcher.");
 
