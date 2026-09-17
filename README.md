@@ -104,5 +104,6 @@ genuine inventory or the empty state was checked. It does not seed production.
 Generic server-only fetch/connector infrastructure is implemented with synthetic tests.
 No real source is registered or enabled. See [C08 architecture](docs/c08-connector-infrastructure.md)
 and [C08 review](docs/section-36-c08-review.md). Run `npm run test:connectors` for isolated security/lease/replay coverage.
-The additive C08 migration is local-only and has not been applied to hosted Supabase.
-C09 has not started; C08 changes await review before commit/push.
+C08 is approved and committed. Its additive migration is now applied to hosted Supabase.
+See [C08.5 hosted verification](docs/c085-hosted-verification.md) for actual Storage privacy,
+exact fixture cleanup and full validation results. C09 has not started.

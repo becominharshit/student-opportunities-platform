@@ -59,6 +59,6 @@ Storage HTTP is mocked; bucket metadata and restrictive policies are tested in a
 
 Run `npm test`, `npm run db:types:check`, `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test:bundle`, `npm run test:boundary`, and `npm run test:public:ui`. `npm run test:connectors` runs C08 alone. Existing event/public/database aliases are included in npm test.
 
-No packages or environment variables were added. The migration is only replayed locally. Review/apply it in an isolated Supabase environment and verify actual Storage enforcement before future live activation. C08 tests make no production database changes.
+No packages or environment variables were added. The original C08 tests make no production database changes. Subsequently, C08.5 applied the additive migration to the intended hosted project and verified actual Storage HTTP/privacy with exact temporary-fixture cleanup. See [C08.5 hosted verification](c085-hosted-verification.md). No live source was contacted or activated.
 
 References: [Node HTTPS](https://nodejs.org/docs/latest-v24.x/api/https.html), [Node DNS](https://nodejs.org/docs/latest-v24.x/api/dns.html), [Supabase Storage access control](https://supabase.com/docs/guides/storage/security/access-control). Installed Next.js server/client-boundary documentation was read before implementation.

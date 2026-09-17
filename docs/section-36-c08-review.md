@@ -2,6 +2,8 @@
 
 16 September 2026. Baseline: approved C07 commit 366367f9e68da636adc5ca6c5f2b467de4751ddf on main. C08 is limited to generic infrastructure, as explicitly authorized despite no approved live source.
 
+Status update: C08 was subsequently approved and committed/pushed as `e609508e24e3040532d30903d99b8a1d16736958`. [C08.5 hosted verification](c085-hosted-verification.md) supersedes the historical pending migration/Storage gate below. The original review record follows.
+
 ## Outcome
 
 **C08 is complete for local implementation review.** Generic server-only connector contracts, policy-bound fetching, private evidence retention, source leases/checkpoints, shared request budgets and sync-run logging are implemented. Production registration is empty. No source was enabled/contacted; no FOSS United fetch, real parser, event normalization, canonical publication, scheduler or C09 implementation was added. Changes remain uncommitted for review. This is not a live-ingestion or hosted Storage sign-off.
