@@ -117,7 +117,7 @@ test("interests/skills ownership and controlled vocabularies", async () => asRol
   for (const [table,fk,lookup] of [["user_interests","interest_id","interests"],["user_skills","skill_id","skills"]]) {
     assert.equal(await count(table),0);
     await db.query(`insert into public.${table}(user_id,${fk}) select $1,id from public.${lookup}`,[A]);
-    assert.equal(await count(table),1);
+    assert.equal(await count(table),await count(lookup));
     await rejected(`insert into public.${table}(user_id,${fk}) select $1,id from public.${lookup}`,"42501",[ADMIN]);
     assert.equal((await db.query(`delete from public.${table} where user_id=$1 returning *`,[B])).rows.length,0);
   }

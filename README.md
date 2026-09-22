@@ -111,3 +111,19 @@ and [C08 review](docs/section-36-c08-review.md). Run `npm run test:connectors` f
 C08 is approved and committed. Its additive migration is now applied to hosted Supabase.
 See [C08.5 hosted verification](docs/c085-hosted-verification.md) for actual Storage privacy,
 exact fixture cleanup and full validation results. C09 has not started.
+
+## C13 review checkpoint
+
+Private `/account`, `/account/profile` and `/onboarding` now support optional student
+information, controlled interests/skills and event preferences. Each section saves
+through the authenticated session and an atomic RLS-protected transaction. Missing
+information remains unset; profile completion is not an event match score.
+
+See [C13 review](docs/section-36-c13-review.md) for schema, fields, validation,
+hosted verification and exact fixture cleanup. The additive C13 migration is already
+applied to the intended hosted project; do not reapply or reset the database.
+Run `npm run test:profiles` and, after building, `npm run test:profiles:ui`.
+`node scripts/verify-c13-hosted.mjs` explicitly creates and cleans up two temporary
+Auth accounts; it is separate from the isolated test suite.
+
+C13 is complete, hosted-verified and review-approved. C09–C11/C17 remain deferred. C14 has not started.

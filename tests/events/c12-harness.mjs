@@ -12,8 +12,8 @@ export async function searchFixtures() {
     update public.events set mode='online',country='IN',city='Pune',fee_status='free',min_team_size=2,max_team_size=4,eligible_years='{1,2}',eligible_degrees='{BTech}',prize_pool=100,prize_currency='INR',registration_status='open' where id='${fixtureId(1)}';
     update public.events set title='Quantum research sprint', short_description='Build neural systems',mode='offline',country='US',city='Boston',fee_status='paid',fee=20,currency='USD',individual_allowed=false,prize_pool=0,prize_currency='USD',registration_status='closed',start_date='2026-11-01',created_at='2026-09-02T12:34:56.123456Z' where id='${fixtureId(2)}';
     update public.events set individual_allowed=true,mode='hybrid',fee_status='varies',registration_status='not_open',prize_description='Equipment award' where id='${fixtureId(3)}';
-    insert into public.skills(id,slug,name) values('60000000-0000-0000-0000-000000000001','python','Python');
-    insert into public.event_tags(event_id,tag,kind,skill_id) values('${fixtureId(2)}','python','skill','60000000-0000-0000-0000-000000000001');
+    insert into public.skills(id,slug,name) values('60000000-0000-0000-0000-000000000001','python','Python') on conflict(slug) do nothing;
+    insert into public.event_tags(event_id,tag,kind,skill_id) values('${fixtureId(2)}','python','skill',(select id from public.skills where slug='python'));
     update public.events set category_id=(select id from public.event_categories where slug='workshop') where id='${fixtureId(2)}';
     insert into public.event_deadlines(event_id,kind,label,precision,local_date,active,is_primary) values('${fixtureId(2)}','registration','Apply','date_only','2026-10-20',true,true);
   `);
