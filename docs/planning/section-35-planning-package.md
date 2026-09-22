@@ -2,6 +2,8 @@
 
 Prepared 12 September 2026. Planning baseline v1.0.
 
+> **Roadmap supersession — 22 September 2026:** The project owner has changed the current release to a **Manual-Content Product Beta**. Use [the current implementation roadmap and milestone status](implementation-roadmap.md) and `PROJECT_STATE.md` for execution order and current status. C09, live-source-dependent C10, C11 and C17 are **DEFERRED, not completed**, until after product completion and deployment. Preserve C07 research and C08/C08.5 infrastructure; no source permission is granted. C12 now proceeds from C05/C06, followed by C13 → C14 → C15 → C16 → C18 → C19, then the originally V0.2 product features, then C20 → C21. The original source-first dependencies, release staging, source-count/freshness launch gates, and “all tasks not started” statements below are historical and superseded where they conflict with this decision. Technical architecture, source safeguards and other product requirements remain in force. The historical no-code/no-infrastructure statements describe the original planning date, not current implementation progress.
+
 Authority: `student_opportunities_master_instructions.md`, read in full, Sections 1–37. This package implements Section 35. The supplied document remains authoritative; decisions below fill implementation gaps and do not replace its requirements. No production code, infrastructure, accounts, source integrations, or external communications have been created.
 
 ## 1. Concise PRD

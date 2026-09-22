@@ -4,6 +4,10 @@ C01/C02 foundation plus C03 database migrations, RLS and safe Supabase clients.
 C04 adds minimal authentication pages, protected account/admin destinations and session refresh.
 C05 adds canonical event management; C06 adds public Explore and Event Detail.
 No automated source integration, calendar, or AI is implemented.
+Current release: **Manual-Content Product Beta**. See [the implementation roadmap and milestone status](docs/planning/implementation-roadmap.md).
+Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12 implementation is approved and C12.5 hosted verification passed; C13 has not started.
+
+See [C12 review and validation](docs/section-36-c12-review.md) and [C12.5 hosted sign-off](docs/c125-hosted-verification.md). The additive C12 migration is applied to the linked hosted project. Real anonymous/authenticated RPC and hosted-backed production-build Explore checks passed with genuine empty inventory. No new environment settings are required. Run `npm run test:search`, `npm run test:search:ui` (after a build), and `node scripts/explain-c12.mjs` for isolated C12 checks. The separate `scripts/verify-c125-hosted.mjs` verifier creates/deletes one exact temporary Auth account but never inserts event inventory; it supports `C125_ENV_FILE` for the existing ignored configuration path. Stop after C12.5; do not start C13 automatically.
 See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
 See [C03 database guide](docs/c03-database.md) for schema, security and test details.
 See [latest C03 security verification](docs/c03-final-security-verification.md) for the current credential gate.
@@ -39,7 +43,7 @@ imports; `npm run test:bundle` scans browser assets after building.
 - `src/lib/utils.ts`: class merging utility.
 - `components.json`: shadcn component generation configuration.
 - `.env.example`: blank Supabase settings, no credentials.
-- `docs/planning`: unchanged supplied product and implementation baselines.
+- `docs/planning`: supplied product baseline, historical implementation baseline, and current implementation roadmap.
 
 System fonts keep builds independent of Google Fonts availability. The holding
 page requests no indexing; revisit metadata when real public content exists.

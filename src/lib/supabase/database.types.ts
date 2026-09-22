@@ -865,6 +865,7 @@ export type Database = { public: {
   Functions: {
     connector_runtime: { Args: { command: Json }; Returns: Json };
     mutate_event: { Args: { command: Json }; Returns: Json };
+    search_published_events: { Args: { filters: Json; page_after: Json }; Returns: Json };
   };
   Enums: { [_ in never]: never };
   CompositeTypes: { [_ in never]: never };
