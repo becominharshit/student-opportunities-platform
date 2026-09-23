@@ -11,7 +11,7 @@
     "db:start": "supabase start",
     "db:types": "node scripts/generate-db-types.mjs",
     "test:bundle": "node scripts/check-client-bundle.mjs",
-    "test": "node --test tests/database/c03.test.mjs tests/security.test.mjs tests/auth.test.mjs tests/auth-handlers.test.mjs tests/events/c05.test.mjs tests/events/c06.test.mjs tests/connectors/c08.test.mjs tests/events/c12.test.mjs tests/profiles/c13.test.mjs tests/profiles/handler.test.mjs tests/recommendations/c14.test.mjs tests/recommendations/service.test.mjs tests/for-you/c15.test.mjs tests/saves/c16.test.mjs tests/admin/c18.test.mjs",
+    "test": "node --test tests/database/c03.test.mjs tests/security.test.mjs tests/auth.test.mjs tests/auth-handlers.test.mjs tests/events/c05.test.mjs tests/events/c06.test.mjs tests/connectors/c08.test.mjs tests/events/c12.test.mjs tests/profiles/c13.test.mjs tests/profiles/handler.test.mjs tests/recommendations/c14.test.mjs tests/recommendations/service.test.mjs tests/for-you/c15.test.mjs tests/saves/c16.test.mjs tests/admin/c18.test.mjs tests/calendar/calendar.test.mjs",
     "test:boundary": "node scripts/test-server-boundary.mjs",
     "db:types:check": "node scripts/generate-db-types.mjs --check",
     "db:reset:local": "supabase db reset --local",
@@ -40,7 +40,10 @@
     "test:admin": "node --test tests/admin/c18.test.mjs",
     "test:admin:ui": "node scripts/test-c18-ui.mjs",
     "test:admin:hosted": "node scripts/verify-c18-hosted.mjs",
-    "test:admin:performance": "node scripts/explain-c18.mjs"
+    "test:admin:performance": "node scripts/explain-c18.mjs",
+    "test:calendar": "node --test tests/calendar/calendar.test.mjs",
+    "test:calendar:ui": "node scripts/test-calendar-ui.mjs",
+    "test:calendar:hosted": "node scripts/verify-calendar-hosted.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

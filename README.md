@@ -3,11 +3,14 @@
 C01/C02 foundation plus C03 database migrations, RLS and safe Supabase clients.
 C04 adds minimal authentication pages, protected account/admin destinations and session refresh.
 C05 adds canonical event management; C06 adds public Explore and Event Detail.
-No automated source integration, calendar, or AI is implemented.
+C18 adds complete administrator dashboard and lossless structured event editing.
+Calendar Export adds RFC 5545 `.ics` download and safe Google Calendar prefilled event links.
+No automated source integration, notifications, or AI is implemented.
 Current release: **Manual-Content Product Beta**. See [the implementation roadmap and milestone status](docs/planning/implementation-roadmap.md).
-Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12 implementation is approved and C12.5 hosted verification passed; C13 is complete and committed; C14 is complete and review-approved.
+Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12–C16 and C18 are complete and committed; Calendar Export is implemented awaiting review.
 
-See [C12 review and validation](docs/section-36-c12-review.md) and [C12.5 hosted sign-off](docs/c125-hosted-verification.md). The additive C12 migration is applied to the linked hosted project. Real anonymous/authenticated RPC and hosted-backed production-build Explore checks passed with genuine empty inventory. No new environment settings are required. Run `npm run test:search`, `npm run test:search:ui` (after a build), and `node scripts/explain-c12.mjs` for isolated C12 checks. The separate `scripts/verify-c125-hosted.mjs` verifier creates/deletes one exact temporary Auth account but never inserts event inventory; it supports `C125_ENV_FILE` for the existing ignored configuration path. C13/C14 status is recorded in PROJECT_STATE.md.
+See [Calendar Export review and validation](docs/section-36-calendar-review.md). Zero new database migrations. Run `npm run test:calendar`, `npm run test:calendar:ui` (Playwright across 320/390/768/1280px), and `npm run test:calendar:hosted` for isolated calendar checks.
+See [C18 administrator experience review](docs/section-36-c18-review.md). Run `npm run test:admin`, `npm run test:admin:ui`, and `npm run test:admin:hosted`.
 See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
 See [C03 database guide](docs/c03-database.md) for schema, security and test details.
 See [latest C03 security verification](docs/c03-final-security-verification.md) for the current credential gate.

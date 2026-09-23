@@ -15,6 +15,13 @@ export async function loadComponents() {
   let source = await readFile(new URL("../../src/components/public-events.tsx", import.meta.url), "utf8");
   const saveCode=Buffer.from(moduleUrl(await readFile(new URL("../../src/components/save-control.tsx",import.meta.url),"utf8")).split(",")[1],"base64").toString().replace('"react/jsx-runtime"',JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));
   source=source.replace('"./save-control"',JSON.stringify("data:text/javascript;base64,"+Buffer.from(saveCode).toString("base64")));
+  const calCode=Buffer.from(moduleUrl(await readFile(new URL("../../src/lib/events/calendar.ts",import.meta.url),"utf8")).split(",")[1],"base64").toString();
+  const calUrl="data:text/javascript;base64,"+Buffer.from(calCode).toString("base64");
+  let actionsSource=await readFile(new URL("../../src/components/calendar-actions.tsx",import.meta.url),"utf8");
+  actionsSource=actionsSource.replaceAll('"@/lib/events/calendar"',JSON.stringify(calUrl));
+  let actionsCompiled=Buffer.from(moduleUrl(actionsSource).split(",")[1],"base64").toString();
+  actionsCompiled=actionsCompiled.replace('"react/jsx-runtime"',JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));
+  source=source.replace('"./calendar-actions"',JSON.stringify("data:text/javascript;base64,"+Buffer.from(actionsCompiled).toString("base64")));
   source = source.replace('"@/lib/events/presentation"', JSON.stringify(format)).replace('"next/link"', JSON.stringify(link));
   let compiled = Buffer.from(moduleUrl(source).split(",")[1], "base64").toString();
   compiled = compiled.replace('"react/jsx-runtime"', JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));
