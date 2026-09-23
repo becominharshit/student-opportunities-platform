@@ -5,9 +5,9 @@ C04 adds minimal authentication pages, protected account/admin destinations and 
 C05 adds canonical event management; C06 adds public Explore and Event Detail.
 No automated source integration, calendar, or AI is implemented.
 Current release: **Manual-Content Product Beta**. See [the implementation roadmap and milestone status](docs/planning/implementation-roadmap.md).
-Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12 implementation is approved and C12.5 hosted verification passed; C13 has not started.
+Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12 implementation is approved and C12.5 hosted verification passed; C13 is complete and committed; C14 is complete and review-approved.
 
-See [C12 review and validation](docs/section-36-c12-review.md) and [C12.5 hosted sign-off](docs/c125-hosted-verification.md). The additive C12 migration is applied to the linked hosted project. Real anonymous/authenticated RPC and hosted-backed production-build Explore checks passed with genuine empty inventory. No new environment settings are required. Run `npm run test:search`, `npm run test:search:ui` (after a build), and `node scripts/explain-c12.mjs` for isolated C12 checks. The separate `scripts/verify-c125-hosted.mjs` verifier creates/deletes one exact temporary Auth account but never inserts event inventory; it supports `C125_ENV_FILE` for the existing ignored configuration path. Stop after C12.5; do not start C13 automatically.
+See [C12 review and validation](docs/section-36-c12-review.md) and [C12.5 hosted sign-off](docs/c125-hosted-verification.md). The additive C12 migration is applied to the linked hosted project. Real anonymous/authenticated RPC and hosted-backed production-build Explore checks passed with genuine empty inventory. No new environment settings are required. Run `npm run test:search`, `npm run test:search:ui` (after a build), and `node scripts/explain-c12.mjs` for isolated C12 checks. The separate `scripts/verify-c125-hosted.mjs` verifier creates/deletes one exact temporary Auth account but never inserts event inventory; it supports `C125_ENV_FILE` for the existing ignored configuration path. C13/C14 status is recorded in PROJECT_STATE.md.
 See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
 See [C03 database guide](docs/c03-database.md) for schema, security and test details.
 See [latest C03 security verification](docs/c03-final-security-verification.md) for the current credential gate.
@@ -126,4 +126,27 @@ Run `npm run test:profiles` and, after building, `npm run test:profiles:ui`.
 `node scripts/verify-c13-hosted.mjs` explicitly creates and cleans up two temporary
 Auth accounts; it is separate from the isolated test suite.
 
-C13 is complete, hosted-verified and review-approved. C09–C11/C17 remain deferred. C14 has not started.
+C13 is complete, hosted-verified and review-approved. C09–C11/C17 remain deferred. C14 is complete and review-approved; C15 has not started.
+
+
+## C14 review checkpoint
+
+Server-only, three-valued eligibility and deterministic weighted match scoring are
+integrated into Event Detail for the authenticated student only. Public facts remain
+available anonymously. Unknown facts remain unknown; a headline match requires
+eligible status and at least 75% weighted evidence coverage. No migration, new
+configuration, AI or catalogue-wide personalized sort is introduced.
+
+See [C14 review](docs/section-36-c14-review.md) for exact rules, scoring, privacy,
+validation and the hosted profile/RLS-only verification limitation.
+
+```sh
+npm run test:recommendations
+npm run test:recommendations:ui
+npm run test:recommendations:hosted
+```
+
+Run UI validation after the production build. Hosted verification uses the existing
+ignored environment configuration and creates/deletes exactly two temporary Auth
+accounts and their private dependent rows; it never creates hosted events or sources.
+Results/fixture IDs stay in ignored `work/c14`. C14 review was approved on 23 September 2026. Do not start C15 automatically. C09–C11/C17 remain DEFERRED.

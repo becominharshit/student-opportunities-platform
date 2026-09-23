@@ -38,7 +38,7 @@ These are recorded prior results, not fresh production verification performed in
 
 ## Current implementation order
 
-C12 is **APPROVED — FULL C12.5 HOSTED SIGN-OFF**; see `../c125-hosted-verification.md`. Its reviewed migration is applied; real anonymous/authenticated RPC and hosted-backed Explore checks passed with empty inventory. No commit/push was made. All later rows remain **NOT STARTED**. Stop after C12.5; do not start C13 automatically. Codex owns implementation and verification; the project owner supplies provider/deployment configuration where required. These are ordered work items, not concurrent assignments or calendar promises.
+C12/C12.5 are complete and committed/pushed in `d5b0d0434d57c867ac062dba05a7bad245b4067c`; their migration/hosted sign-off is recorded in `../c125-hosted-verification.md`. C13 is complete, approved and committed/pushed in `3b6e7f62f39936aafa6bc6c8197c5f8431bf5c69`. C14 is complete — review approved; see `../section-36-c14-review.md`. C15 and subsequent product work are NOT STARTED. C14 commit/push was authorized on 23 September 2026. The deferred source sequence below is unchanged. Codex owns implementation and verification; the project owner supplies provider/deployment configuration where required. These are ordered work items, not concurrent assignments or calendar promises.
 
 | Order | Task | Active dependency and completion scope |
 |---|---|---|

@@ -37,3 +37,17 @@ assert.match(output,/server-only/);
 assert.match(output,/Client Component|use client|Server Component/);
 console.log("PASS: Next.js rejected a Client Component importing the actual connector fetcher.");
 
+
+await mkdir(fixture+"/app/recommendations");
+await mkdir(fixture+"/app/events");
+for(const name of ["types","explanations","eligibility","facts","scoring"])await copyFile(new URL("src/lib/recommendations/"+name+".ts",root),fixture+"/app/recommendations/"+name+".ts");
+await copyFile(new URL("src/lib/events/validation.ts",root),fixture+"/app/events/validation.ts");
+await writeFile(fixture+"/app/page.tsx",'"use client";\nimport {evaluateRecommendation} from "./recommendations/scoring";\nexport default function Page(){return <span>{evaluateRecommendation.name}</span>;}');
+output="";
+const recommendationStatus=await new Promise((resolve,reject)=>{
+ const child=spawn(process.execPath,[fileURLToPath(new URL("node_modules/next/dist/bin/next",root)),"build",fixture],{windowsHide:true,timeout:60000});
+ child.stdout.on("data",x=>output+=x);child.stderr.on("data",x=>output+=x);child.on("error",reject);child.on("close",resolve);
+});
+assert.notEqual(recommendationStatus,0,"Unsafe recommendation fixture unexpectedly built");
+assert.match(output,/server-only/);assert.match(output,/Client Component|use client|Server Component/);
+console.log("PASS: Next.js rejected a Client Component importing the actual recommendation evaluator.");

@@ -98,6 +98,7 @@ test("C06 actual detail route calls notFound for every hidden state and a missin
   const viewUrl=moduleUrl("export function EventDetailContent(){return null;}");
   const navUrl=moduleUrl('export function notFound(){throw new Error("NEXT_HTTP_ERROR_FALLBACK;404");}');
   let source=await readFile(new URL("../../src/app/events/[slug]/page.tsx",import.meta.url),"utf8");
+  source=source.replace('"@/lib/recommendations/service"',JSON.stringify(moduleUrl('export const recommendationForEvent=async()=>({kind:"anonymous"});'))).replace('"@/components/event-personalization"',JSON.stringify(moduleUrl('export const EventPersonalization=()=>null;')));
   source=source.replace('"@/lib/events/public"',JSON.stringify(apiUrl)).replace('"@/components/public-events"',JSON.stringify(viewUrl)).replace('"next/navigation"',JSON.stringify(navUrl));
   let url=moduleUrl(source);
   const compiled=Buffer.from(url.split(",")[1],"base64").toString().replace('"react/jsx-runtime"',JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));
