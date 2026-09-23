@@ -262,7 +262,7 @@ test("17-19. Content headers, disposition, and absence of private data in ICS", 
     start_date: "2026-10-12",
     short_description: "Public summary only",
     // Forbidden fields that must never appear in ICS
-    recommendation_score: 95,
+    recommendation_score: 987654,
     user_profile: { name: "Secret Student" },
     raw_storage_ref: "secret/bucket/path",
     admin_notes: "staff only",
@@ -271,7 +271,7 @@ test("17-19. Content headers, disposition, and absence of private data in ICS", 
   assert.ok(!ics.includes("Secret Student"));
   assert.ok(!ics.includes("secret/bucket/path"));
   assert.ok(!ics.includes("staff only"));
-  assert.ok(!ics.includes("95"));
+  assert.ok(!ics.includes("987654"));
   assert.match(ics, /\r\nSUMMARY:Header Test Event\r\n/);
 });
 

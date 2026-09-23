@@ -5,11 +5,13 @@ C04 adds minimal authentication pages, protected account/admin destinations and 
 C05 adds canonical event management; C06 adds public Explore and Event Detail.
 C18 adds complete administrator dashboard and lossless structured event editing.
 Calendar Export adds RFC 5545 `.ics` download and safe Google Calendar prefilled event links.
-No automated source integration, notifications, or AI is implemented.
+Notifications adds in-app notifications (`/notifications`), transactional email transport, hourly deadline reminders, and substantive event changes sweepers.
+No automated source integration, AI, or organizer submissions are implemented.
 Current release: **Manual-Content Product Beta**. See [the implementation roadmap and milestone status](docs/planning/implementation-roadmap.md).
-Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12–C16 and C18 are complete and committed; Calendar Export is implemented awaiting review.
+Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12–C16, C18, and Calendar Export are complete and committed; Notifications is implemented awaiting review.
 
-See [Calendar Export review and validation](docs/section-36-calendar-review.md). Zero new database migrations. Run `npm run test:calendar`, `npm run test:calendar:ui` (Playwright across 320/390/768/1280px), and `npm run test:calendar:hosted` for isolated calendar checks.
+See [Notifications review and validation](docs/section-36-notifications-review.md). Exactly one additive migration `20260924000100_notifications.sql` applied. Run `npm run test:notifications`, `npm run test:notifications:performance`, `npm run test:notifications:ui` (Playwright across 320/390/768/1280px), and `npm run test:notifications:hosted` for isolated and hosted checks.
+See [Calendar Export review and validation](docs/section-36-calendar-review.md). Zero new database migrations. Run `npm run test:calendar`, `npm run test:calendar:ui`, and `npm run test:calendar:hosted`.
 See [C18 administrator experience review](docs/section-36-c18-review.md). Run `npm run test:admin`, `npm run test:admin:ui`, and `npm run test:admin:hosted`.
 See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
 See [C03 database guide](docs/c03-database.md) for schema, security and test details.
@@ -228,5 +230,34 @@ npm run test:admin:hosted
 All 7 C18 tests and 354 total test suites pass. Playwright UI tests verify responsive
 layout without horizontal overflow across 320px, 390px, 768px, and 1280px. Hosted verification
 confirms empty catalogue, RLS negative checks, and exact temporary account cleanup.
-C18 awaits review; do not commit/push or begin C19/calendar/notifications automatically.
+C18 was approved and pushed to main in `3ad0e3140bb2ab9174e784f54306dee083f4eeac`.
 C09–C11/C17 remain DEFERRED.
+
+## Notifications review checkpoint
+
+The Notifications milestone implements an asynchronous, privacy-preserving notification engine
+across in-app (`/notifications`) and transactional email channels.
+
+Features:
+- Lookahead keyset pagination (24+1) on `(user_id, created_at DESC, id DESC)`.
+- Partial index for navigation unread count (`notifications_user_unread_idx`).
+- Safe dynamic resolution: Stored notifications contain generic text; published event titles are prepended on the fly; unpublished events omit links and render neutral redaction notices.
+- Transactional email transport abstraction with pre-send publication verification and zero real email sandbox.
+- Hourly registration deadline reminders with bounded single-stage catch-up ladder (`1d`, `3d`, `7d`).
+- Hourly substantive event changes sweeper with persistent cursor tracking in `private.notification_runner_cursors`.
+- Mutual exclusion runner leases (`private.notification_runner_leases`) with TTL preventing overlapping cron runs.
+- Bounded `SECURITY DEFINER` RPCs (`mark_notification_read`, `mark_all_notifications_read`).
+- One additive migration: `20260924000100_notifications.sql` (applied and verified on hosted Supabase).
+
+```sh
+npm run test:notifications
+npm run test:notifications:performance
+npm run test:notifications:ui
+npm run test:notifications:hosted
+```
+
+All 21 Notifications unit tests pass (394 total test suites in `npm test`).
+Playwright UI tests verify responsive layout without horizontal overflow across 320px, 390px, 768px, and 1280px.
+EXPLAIN ANALYZE confirms index scans on 5,000 synthetic rows.
+Hosted verification confirms RLS enforcement, cross-user isolation, runner secret protection, and clean teardown with 100% inventory conservation.
+Notifications awaits review; do not commit/push or begin Notifications 1.1 / C19 / AI / organizer submissions.

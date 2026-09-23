@@ -66,11 +66,14 @@ async function rejected(sql, code, params = []) {
   assert.equal(error.code, code, error.message);
 }
 
-test("clean migrations preserve the 17 C03 tables plus 2 private C08 runtime tables, all with RLS", async () => {
+test("clean migrations preserve the 17 C03 tables plus 2 private C08 runtime tables plus 3 notifications tables, all with RLS", async () => {
   const rows = (await db.query("select relname, relrowsecurity from pg_class join pg_namespace n on n.oid=relnamespace where n.nspname='public' and relkind='r'")).rows;
-  assert.equal(rows.length,19);
+  assert.equal(rows.length,22);
   assert.ok(rows.some(r => r.relname === "connector_evidence"));
   assert.ok(rows.some(r => r.relname === "connector_host_budgets"));
+  assert.ok(rows.some(r => r.relname === "notification_preferences"));
+  assert.ok(rows.some(r => r.relname === "notifications"));
+  assert.ok(rows.some(r => r.relname === "notification_deliveries"));
   assert.ok(rows.every(r => r.relrowsecurity));
 });
 test("migration replay succeeds independently on a second fresh database", async () => {

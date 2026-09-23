@@ -546,6 +546,138 @@ export type Database = { public: {
 
       ];
     };
+    notification_deliveries: {
+      Row: {
+        id: string;
+        notification_id: string;
+        user_id: string;
+        channel: string;
+        status: string;
+        attempt_count: number;
+        next_attempt_at: string;
+        sent_at: string | null;
+        last_error_code: string | null;
+        last_error_message: string | null;
+        idempotency_key: string;
+        created_at: string;
+        updated_at: string;
+      };
+      Insert: {
+        id?: string;
+        notification_id: string;
+        user_id: string;
+        channel: string;
+        status?: string;
+        attempt_count?: number;
+        next_attempt_at?: string;
+        sent_at?: string | null;
+        last_error_code?: string | null;
+        last_error_message?: string | null;
+        idempotency_key: string;
+        created_at?: string;
+        updated_at?: string;
+      };
+      Update: {
+        id?: string;
+        notification_id?: string;
+        user_id?: string;
+        channel?: string;
+        status?: string;
+        attempt_count?: number;
+        next_attempt_at?: string;
+        sent_at?: string | null;
+        last_error_code?: string | null;
+        last_error_message?: string | null;
+        idempotency_key?: string;
+        created_at?: string;
+        updated_at?: string;
+      };
+      Relationships: [
+        { foreignKeyName: "notification_deliveries_notification_id_fkey"; columns: ["notification_id"]; isOneToOne: false; referencedRelation: "notifications"; referencedColumns: ["id"] },
+      ];
+    };
+    notification_preferences: {
+      Row: {
+        user_id: string;
+        in_app_enabled: boolean;
+        email_enabled: boolean;
+        deadline_reminders: boolean;
+        event_changes: boolean;
+        recommendations: boolean;
+        created_at: string;
+        updated_at: string;
+      };
+      Insert: {
+        user_id: string;
+        in_app_enabled?: boolean;
+        email_enabled?: boolean;
+        deadline_reminders?: boolean;
+        event_changes?: boolean;
+        recommendations?: boolean;
+        created_at?: string;
+        updated_at?: string;
+      };
+      Update: {
+        user_id?: string;
+        in_app_enabled?: boolean;
+        email_enabled?: boolean;
+        deadline_reminders?: boolean;
+        event_changes?: boolean;
+        recommendations?: boolean;
+        created_at?: string;
+        updated_at?: string;
+      };
+      Relationships: [
+
+      ];
+    };
+    notifications: {
+      Row: {
+        id: string;
+        user_id: string;
+        type: string;
+        event_id: string | null;
+        event_version: number | null;
+        title: string;
+        body: string;
+        action_url: string | null;
+        idempotency_key: string;
+        in_app_visible: boolean;
+        read_at: string | null;
+        created_at: string;
+      };
+      Insert: {
+        id?: string;
+        user_id: string;
+        type: string;
+        event_id?: string | null;
+        event_version?: number | null;
+        title: string;
+        body: string;
+        action_url?: string | null;
+        idempotency_key: string;
+        in_app_visible?: boolean;
+        read_at?: string | null;
+        created_at?: string;
+      };
+      Update: {
+        id?: string;
+        user_id?: string;
+        type?: string;
+        event_id?: string | null;
+        event_version?: number | null;
+        title?: string;
+        body?: string;
+        action_url?: string | null;
+        idempotency_key?: string;
+        in_app_visible?: boolean;
+        read_at?: string | null;
+        created_at?: string;
+      };
+      Relationships: [
+        { foreignKeyName: "notifications_event_id_fkey"; columns: ["event_id"]; isOneToOne: false; referencedRelation: "events"; referencedColumns: ["id"] },
+      ];
+    };
     organizers: {
       Row: {
         id: string;
@@ -863,11 +995,18 @@ export type Database = { public: {
     };
   };
   Functions: {
+    acquire_runner_lease: { Args: { p_job_name: string; p_owner: string; p_duration_seconds: number }; Returns: boolean };
+    claim_email_deliveries: { Args: { p_batch_size: number }; Returns: Json };
     connector_runtime: { Args: { command: Json }; Returns: Json };
     for_you_candidates: { Args: Record<string, never>; Returns: Json };
+    get_runner_cursor: { Args: { p_job_name: string }; Returns: Json };
+    mark_all_notifications_read: { Args: Record<string, never>; Returns: number };
+    mark_notification_read: { Args: { p_notification_id: string }; Returns: boolean };
     mutate_event: { Args: { command: Json }; Returns: Json };
+    release_runner_lease: { Args: { p_job_name: string; p_owner: string }; Returns: string };
     save_profile_section: { Args: { section: string; values_json: Json }; Returns: boolean };
     search_published_events: { Args: { filters: Json; page_after: Json }; Returns: Json };
+    update_runner_cursor: { Args: { p_job_name: string; p_cursor_timestamp: string; p_cursor_id: string }; Returns: string };
   };
   Enums: { [_ in never]: never };
   CompositeTypes: { [_ in never]: never };
