@@ -5,7 +5,7 @@ import { getPublicSupabaseEnv } from "../supabase/public-env";
 import { uuid } from "./validation";
 // Explicit public projection: never ship evidence, raw metadata or private relations.
 const detailFields = "id,slug,title,short_description,full_description,participation_process,official_url,registration_url,start_date,end_date,start_at,end_at,timezone,date_precision,mode,venue,city,state,country,eligibility_text,individual_allowed,min_team_size,max_team_size,fee,fee_max,fee_status,fee_basis,currency,prize_pool,prize_currency,prize_description,status,registration_status,verification_level,verification_status,last_checked_at,version,organizers(id,name,website),event_categories(id,slug,name),event_tags(tag,kind,skill_id),event_deadlines(id,kind,label,local_date,due_at,timezone,precision,source_id,active,is_primary)" as const;
-const cardFields = "id,slug,title,short_description,start_date,end_date,start_at,end_at,timezone,date_precision,mode,venue,city,state,country,status,registration_status,verification_level,verification_status,last_checked_at,organizers(id,name,website),event_categories(id,slug,name),event_deadlines(id,kind,label,local_date,due_at,timezone,precision,active,is_primary)" as const;
+export const cardFields = "id,slug,title,short_description,start_date,end_date,start_at,end_at,timezone,date_precision,mode,venue,city,state,country,status,registration_status,verification_level,verification_status,last_checked_at,organizers(id,name,website),event_categories(id,slug,name),event_deadlines(id,kind,label,local_date,due_at,timezone,precision,active,is_primary)" as const;
 export function publicClient() {
     const { url, key } = getPublicSupabaseEnv();
     return createClient<Database>(url, key, {

@@ -126,7 +126,7 @@ Run `npm run test:profiles` and, after building, `npm run test:profiles:ui`.
 `node scripts/verify-c13-hosted.mjs` explicitly creates and cleans up two temporary
 Auth accounts; it is separate from the isolated test suite.
 
-C13 is complete, hosted-verified and review-approved. C09–C11/C17 remain deferred. C14 is complete and review-approved; C15 has not started.
+C13 is complete, hosted-verified and review-approved. C09–C11/C17 remain deferred. C14 is complete and review-approved; C15 is complete and review-approved.
 
 
 ## C14 review checkpoint
@@ -149,4 +149,29 @@ npm run test:recommendations:hosted
 Run UI validation after the production build. Hosted verification uses the existing
 ignored environment configuration and creates/deletes exactly two temporary Auth
 accounts and their private dependent rows; it never creates hosted events or sources.
-Results/fixture IDs stay in ignored `work/c14`. C14 review was approved on 23 September 2026. Do not start C15 automatically. C09–C11/C17 remain DEFERRED.
+Results/fixture IDs stay in ignored `work/c14`. C14 review was approved on 23 September 2026. C15 implementation status is recorded below. C09–C11/C17 remain DEFERRED.
+
+
+## C15 review checkpoint
+
+Authenticated `/for-you` uses a read-only SECURITY INVOKER PostgreSQL RPC to select
+at most 100 candidates before applying the unchanged C14 evaluator. Best Matches
+and Worth Reviewing are separate, with honest unknown/empty states and C13 profile
+completion guidance. This is one bounded set, not whole-catalogue match pagination.
+
+The additive `20260923000100_c15_for_you.sql` migration is already applied and
+hosted-verified; do not reapply it. No environment changes or dependencies are needed.
+See [C15 review](docs/section-36-c15-review.md) for ranking, privacy, local performance,
+validation and exact hosted cleanup. C15 is complete and review-approved; C16 has not started.
+
+```sh
+npm run test:for-you
+npm run test:for-you:performance
+npm run test:for-you:ui
+npm run test:for-you:hosted
+```
+
+UI tests require a build. Performance fixtures remain isolated in embedded PostgreSQL.
+Hosted verification uses genuine empty event inventory and exactly two temporary Auth
+accounts, then deletes those accounts/dependent rows. Results stay in ignored `work/c15`.
+No hosted events or sources are seeded. C15 review is approved; do not begin C16 automatically.

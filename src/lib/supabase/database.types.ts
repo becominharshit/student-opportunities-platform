@@ -864,6 +864,7 @@ export type Database = { public: {
   };
   Functions: {
     connector_runtime: { Args: { command: Json }; Returns: Json };
+    for_you_candidates: { Args: Record<string, never>; Returns: Json };
     mutate_event: { Args: { command: Json }; Returns: Json };
     save_profile_section: { Args: { section: string; values_json: Json }; Returns: boolean };
     search_published_events: { Args: { filters: Json; page_after: Json }; Returns: Json };

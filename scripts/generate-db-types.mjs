@@ -41,7 +41,7 @@ try {
   for(const t of tables.filter(t=>t.table_type==="VIEW")) output+=await render(t.table_name,true);
   const functions = (await db.query(`select p.proname, p.proargnames, array(select format_type(t,null) from unnest(p.proargtypes::oid[]) t) argtypes, format_type(p.prorettype,null) result from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' order by p.proname`)).rows;
   const scalar = t => t === "jsonb" ? "Json" : ["integer","bigint","numeric"].includes(t) ? "number" : t === "boolean" ? "boolean" : "string";
-  output+="  };\n  Functions: {\n" + functions.map(f=>"    "+f.proname+": { Args: { "+f.proargnames.map((n,i)=>n+": "+scalar(f.argtypes[i])).join("; ")+" }; Returns: "+scalar(f.result)+" };").join("\n") + "\n  };\n  Enums: { [_ in never]: never };\n  CompositeTypes: { [_ in never]: never };\n} };\n";
+  output+="  };\n  Functions: {\n" + functions.map(f=>"    "+f.proname+": { Args: "+(f.proargnames?.length ? "{ "+f.proargnames.map((n,i)=>n+": "+scalar(f.argtypes[i])).join("; ")+" }" : "Record<string, never>")+"; Returns: "+scalar(f.result)+" };").join("\n") + "\n  };\n  Enums: { [_ in never]: never };\n  CompositeTypes: { [_ in never]: never };\n} };\n";
   const file=new URL("../src/lib/supabase/database.types.ts",import.meta.url);
   if(process.argv.includes("--check")) {
     if(await readFile(file,"utf8")!==output) throw new Error("Database types are stale; run npm run db:types");

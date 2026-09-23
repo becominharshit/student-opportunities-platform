@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import type { PublicEvent, PublicEventCard } from "@/lib/events/public";
 import { dateFact, feeLabel, label, prizeLabel, publicHttps, teamLabel, trustLabel } from "@/lib/events/presentation";
 
-export function DiscoveryShell({ children }: { children: ReactNode }) {
-  return <><header className="border-b border-border"><nav aria-label="Main" className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5 sm:px-8"><Link href="/" className="font-semibold">Student Opportunities</Link><div className="flex gap-6"><Link href="/explore" className="underline underline-offset-4">Explore</Link><Link href="/login" className="underline underline-offset-4">Sign in</Link></div></nav></header><main id="main-content" className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-16">{children}</main><footer className="mx-auto max-w-6xl border-t border-border px-5 py-8 text-sm text-muted-foreground sm:px-8">Registration takes place on the organizer’s website. Check the official rules before applying.</footer></>;
+export function DiscoveryShell({ children, authenticated=false }: { children: ReactNode; authenticated?:boolean }) {
+  return <><header className="border-b border-border"><nav aria-label="Main" className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5 sm:px-8"><Link href="/" className="font-semibold">Student Opportunities</Link><div className="flex flex-wrap gap-6"><Link href="/explore" className="underline underline-offset-4">Explore</Link>{authenticated?<><Link href="/for-you" className="underline underline-offset-4">For You</Link><Link href="/account" className="underline underline-offset-4">Account</Link></>:<Link href="/login" className="underline underline-offset-4">Sign in</Link>}</div></nav></header><main id="main-content" className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-16">{children}</main><footer className="mx-auto max-w-6xl border-t border-border px-5 py-8 text-sm text-muted-foreground sm:px-8">Registration takes place on the organizer’s website. Check the official rules before applying.</footer></>;
 }
 export function FactDate({ date, instant = null, timezone = null }: { date: string | null; instant?: string | null; timezone?: string | null }) {
   const fact = dateFact(date, instant, timezone);
@@ -27,10 +27,11 @@ function Checked({ at }: { at: string | null }) {
 function Field({ name, children }: { name: string; children: ReactNode }) {
   return <div className="min-w-0"><dt className="text-sm text-muted-foreground">{name}</dt><dd className="mt-1 break-words">{children}</dd></div>;
 }
-export function EventCard({ event }: { event: PublicEventCard }) {
+export function EventCard({ event, headingLevel=2 }: { event: PublicEventCard; headingLevel?:2|3 }) {
+  const Heading=headingLevel===3?"h3":"h2";
   return <article className="h-full border-t-2 border-border py-6">
     <p className="text-sm text-primary">{event.event_categories?.name ?? "Category not specified"} · {label(event.mode, "Mode not specified")}</p>
-    <h2 className="mt-3 break-words text-2xl font-semibold tracking-tight"><Link href={`/events/${event.slug}`} className="underline decoration-border underline-offset-4 hover:decoration-primary">{event.title}</Link></h2>
+    <Heading className="mt-3 break-words text-2xl font-semibold tracking-tight"><Link href={`/events/${event.slug}`} className="underline decoration-border underline-offset-4 hover:decoration-primary">{event.title}</Link></Heading>
     <p className="mt-2 text-sm text-muted-foreground">{event.organizers?.name ?? "Organizer not specified"}</p>
     {event.short_description && <p className="mt-4 break-words leading-relaxed">{event.short_description}</p>}
     <dl className="mt-5 grid gap-4 text-sm"><Field name="Event dates"><EventDates event={event} /></Field><Field name="Registration deadline"><Deadline event={event} /></Field><Field name="Location"><Location event={event} /></Field><Field name="Status">{label(event.status, "Event status unknown")} · Registration: {label(event.registration_status, "Unknown")}</Field></dl>

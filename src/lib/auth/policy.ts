@@ -1,6 +1,6 @@
 // Only implemented internal destinations are accepted, including after decoding.
 export function safeDestination(value: unknown): string {
-  return typeof value === "string" && ["/admin", "/account/profile", "/onboarding"].includes(value) ? value : "/account";
+  return typeof value === "string" && ["/for-you", "/admin", "/account/profile", "/onboarding"].includes(value) ? value : "/account";
 }
 
 export function validEmail(value: string): boolean {
