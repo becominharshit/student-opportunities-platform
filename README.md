@@ -200,5 +200,30 @@ npm run test:saves:hosted
 Build before UI tests. Performance/populated browser fixtures run only in isolated
 PostgreSQL. Hosted verification creates/deletes exactly two temporary Auth accounts
 and uses genuine empty inventory; it does not seed hosted events. Results remain in
-ignored `work/c16`. C16 awaits review; do not commit/push or begin C18/calendar/
-notifications automatically. C09–C11/C17 remain DEFERRED.
+ignored `work/c16`. C16 was approved and pushed to main in `6f8a2c15909eeff3c583b6005d67e34aaf8e1b82`.
+
+
+## C18 review checkpoint
+
+Milestone C18 completes the administrator experience with an operational summary command
+center at `/admin`, structured event catalogue filtering with bounded lookahead pagination,
+a lossless structured event editor (`EventEditor`) with controlled tags and independent
+degree/year/rule columns, contextual workflow transitions, duplicate review alerts, and
+safe ingestion provenance and audit timeline diffs.
+
+Zero new migrations, zero database pushes, and zero weakening of publication guards or RLS.
+Links to public event pages are rendered strictly when published. See
+[C18 review](docs/section-36-c18-review.md) for architecture, validation, and limitations.
+
+```sh
+npm run test:admin
+npm run test:admin:performance
+npm run test:admin:ui
+npm run test:admin:hosted
+```
+
+All 7 C18 tests and 354 total test suites pass. Playwright UI tests verify responsive
+layout without horizontal overflow across 320px, 390px, 768px, and 1280px. Hosted verification
+confirms empty catalogue, RLS negative checks, and exact temporary account cleanup.
+C18 awaits review; do not commit/push or begin C19/calendar/notifications automatically.
+C09–C11/C17 remain DEFERRED.

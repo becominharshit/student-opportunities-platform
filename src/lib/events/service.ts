@@ -1,7 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Json } from "../supabase/database.types";
-import { categories, validateCommand, uuid, type EventRow, type Issue } from "./validation";
+import { categories, choices, validateCommand, uuid, type EventRow, type Issue } from "./validation";
 export type Code = "unauthorized" | "forbidden" | "validation" | "not_found" | "version_conflict" | "publication_requirements" | "database_failure";
 export type Result<T> = {
     ok: true;
@@ -29,7 +29,7 @@ function failure(error: {
 }
 export async function authorizeAdmin(client: Client): Promise<Result<string>> {
     const { data, error } = await client.auth.getUser();
-    if (error || !data.user?.email_confirmed_at)
+    if (error || !data?.user?.email_confirmed_at)
         return { ok: false, code: "unauthorized" };
     const membership = await client.from("admin_memberships").select("role").eq("user_id", data.user.id).eq("role", "admin").maybeSingle();
     if (membership.error)
@@ -72,6 +72,127 @@ export async function mutateEvent(client: Client, input: unknown): Promise<Resul
         return failure(error, command.action === "publish" || previous?.publication_status === "published");
     return { ok: true, value: data as unknown as Omit<EventRow, "search_vector"> };
 }
+
+export type AdminDashboardSummary = {
+    counts: {
+        draft: number;
+        review: number;
+        published: number;
+        unpublished: number;
+        archived: number;
+        needsAttention: number;
+        duplicateReviews: number;
+    };
+    recentChanges: Array<{
+        id: string;
+        event_id: string;
+        event_version: number;
+        reason: string;
+        created_at: string;
+        actor_id: string | null;
+        field_diff: Json;
+        events: {
+            id: string;
+            title: string;
+            slug: string;
+        } | null;
+    }>;
+};
+
+export async function getAdminDashboardSummary(client: Client): Promise<Result<AdminDashboardSummary>> {
+    const auth = await authorizeAdmin(client);
+    if (!auth.ok)
+        return auth;
+    const [draftRes, reviewRes, publishedRes, unpublishedRes, archivedRes, attentionRes, duplicateRes, changesRes] = await Promise.all([
+        client.from("events").select("id", { count: "exact", head: true }).eq("publication_status", "draft"),
+        client.from("events").select("id", { count: "exact", head: true }).eq("publication_status", "review"),
+        client.from("events").select("id", { count: "exact", head: true }).eq("publication_status", "published"),
+        client.from("events").select("id", { count: "exact", head: true }).eq("publication_status", "unpublished"),
+        client.from("events").select("id", { count: "exact", head: true }).eq("publication_status", "archived"),
+        client.from("events").select("id", { count: "exact", head: true }).in("verification_status", ["pending", "stale", "conflicted", "rejected"]),
+        client.from("duplicate_reviews").select("id", { count: "exact", head: true }).eq("status", "pending"),
+        client.from("event_changes").select("id, event_id, event_version, reason, created_at, actor_id, field_diff, events(id, title, slug)").order("created_at", { ascending: false }).limit(5),
+    ]);
+    if (draftRes.error) return failure(draftRes.error);
+    if (reviewRes.error) return failure(reviewRes.error);
+    if (publishedRes.error) return failure(publishedRes.error);
+    if (unpublishedRes.error) return failure(unpublishedRes.error);
+    if (archivedRes.error) return failure(archivedRes.error);
+    if (attentionRes.error) return failure(attentionRes.error);
+    if (duplicateRes.error) return failure(duplicateRes.error);
+    if (changesRes.error) return failure(changesRes.error);
+
+    return {
+        ok: true,
+        value: {
+            counts: {
+                draft: draftRes.count ?? 0,
+                review: reviewRes.count ?? 0,
+                published: publishedRes.count ?? 0,
+                unpublished: unpublishedRes.count ?? 0,
+                archived: archivedRes.count ?? 0,
+                needsAttention: attentionRes.count ?? 0,
+                duplicateReviews: duplicateRes.count ?? 0,
+            },
+            recentChanges: (changesRes.data ?? []) as unknown as AdminDashboardSummary["recentChanges"],
+        },
+    };
+}
+
+export type AdminEventListItem = {
+    id: string;
+    title: string;
+    slug: string;
+    publication_status: string;
+    verification_status: string;
+    category_id: string | null;
+    updated_at: string;
+    created_at: string;
+    version: number;
+    event_categories: {
+        id: string;
+        name: string;
+        slug: string;
+    } | null;
+};
+
+export type AdminEventListResult = {
+    items: AdminEventListItem[];
+    hasNextPage: boolean;
+    page: number;
+};
+
+export async function listAdminEvents(
+    client: Client,
+    options: number | { page?: number; status?: string; categoryId?: string; verificationStatus?: string } = 0
+): Promise<Result<AdminEventListResult>> {
+    const auth = await authorizeAdmin(client);
+    if (!auth.ok)
+        return auth;
+    const opts = typeof options === "number" ? { page: options } : options;
+    const page = Number.isSafeInteger(opts.page) && (opts.page ?? 0) >= 0 ? Math.min(opts.page!, 100000) : 0;
+    const offset = page * 25;
+    let query = client.from("events").select("id, title, slug, publication_status, verification_status, category_id, updated_at, created_at, version, event_categories(id, name, slug)");
+
+    if (opts.status && ["draft", "review", "published", "unpublished", "archived"].includes(opts.status)) {
+        query = query.eq("publication_status", opts.status);
+    }
+    if (opts.categoryId && uuid(opts.categoryId)) {
+        query = query.eq("category_id", opts.categoryId);
+    }
+    if (opts.verificationStatus && choices.verification_status.includes(opts.verificationStatus)) {
+        query = query.eq("verification_status", opts.verificationStatus);
+    }
+
+    const result = await query.order("created_at", { ascending: false }).order("id").range(offset, offset + 25);
+    if (result.error)
+        return failure(result.error);
+    const data = result.data ?? [];
+    const hasNextPage = data.length > 25;
+    const items = (hasNextPage ? data.slice(0, 25) : data) as unknown as AdminEventListItem[];
+    return { ok: true, value: { items, hasNextPage, page } };
+}
+
 export async function readAdminEvent(client: Client, id: string) {
     const auth = await authorizeAdmin(client);
     if (!auth.ok)
@@ -81,19 +202,20 @@ export async function readAdminEvent(client: Client, id: string) {
     const result = await client.from("events").select("*, organizers(*), event_categories(*), event_tags(*), event_deadlines(*), event_changes(*), event_sources(id,source_url,last_checked_at,validated_observation,field_evidence)").eq("id", id).maybeSingle();
     if (result.error)
         return failure(result.error);
-    return result.data ? { ok: true as const, value: result.data } : { ok: false as const, code: "not_found" as const };
+    if (!result.data)
+        return { ok: false as const, code: "not_found" as const };
+
+    const dupResult = await client.from("duplicate_reviews").select("id, event_a_id, event_b_id, status, signals, created_at").eq("status", "pending").or(`event_a_id.eq.${id},event_b_id.eq.${id}`);
+    if (dupResult.error)
+        return failure(dupResult.error);
+
+    return { ok: true as const, value: { ...result.data, duplicate_reviews: dupResult.data ?? [] } };
 }
-export async function listAdminEvents(client: Client, page = 0) {
-    const auth = await authorizeAdmin(client);
-    if (!auth.ok)
-        return auth;
-    const offset = Number.isSafeInteger(page) && page >= 0 ? Math.min(page, 100000) * 25 : 0;
-    const result = await client.from("events").select("id,title,slug,publication_status,version").order("created_at", { ascending: false }).order("id").range(offset, offset + 24);
-    return result.error ? failure(result.error) : { ok: true as const, value: result.data };
-}
+
 // Named operations for future callers; all delegate to the same authorization/transaction boundary.
 export const createEvent = (client: Client, input: Omit<import("./validation").Command, "action" | "id" | "expected_version">) => mutateEvent(client, { ...input, action: "create" });
 export const updateEvent = (client: Client, input: Omit<import("./validation").Command, "action">) => mutateEvent(client, { ...input, action: "update" });
+export const reviewEvent = (client: Client, id: string, expected_version: number, reason: string) => mutateEvent(client, { action: "review", id, expected_version, reason });
 export const publishEvent = (client: Client, id: string, expected_version: number, reason: string) => mutateEvent(client, { action: "publish", id, expected_version, reason });
 export const unpublishEvent = (client: Client, id: string, expected_version: number, reason: string) => mutateEvent(client, { action: "unpublish", id, expected_version, reason });
 export const archiveEvent = (client: Client, id: string, expected_version: number, reason: string) => mutateEvent(client, { action: "archive", id, expected_version, reason });
