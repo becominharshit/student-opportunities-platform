@@ -330,6 +330,119 @@ export type Database = { public: {
         { foreignKeyName: "event_sources_event_id_fkey"; columns: ["event_id"]; isOneToOne: false; referencedRelation: "events"; referencedColumns: ["id"] },
       ];
     };
+    event_submissions: {
+      Row: {
+        id: string;
+        submitter_user_id: string | null;
+        status: string;
+        submitter_relationship: string;
+        title: string;
+        organizer_name: string;
+        category_slug: string;
+        mode: string;
+        official_url: string | null;
+        registration_url: string | null;
+        start_date: string | null;
+        end_date: string | null;
+        registration_deadline_precision: string;
+        registration_deadline_local_date: string | null;
+        registration_deadline_due_at: string | null;
+        registration_deadline_timezone: string | null;
+        venue: string | null;
+        city: string | null;
+        state: string | null;
+        country: string | null;
+        description: string | null;
+        eligibility_summary: string | null;
+        min_team_size: number | null;
+        max_team_size: number | null;
+        fee_status: string;
+        fee_amount: number | null;
+        currency: string | null;
+        prize_description: string | null;
+        submitter_notes: string | null;
+        rejection_reason_code: string | null;
+        rejection_reason_details: string | null;
+        version: number;
+        created_at: string;
+        updated_at: string;
+      };
+      Insert: {
+        id?: string;
+        submitter_user_id?: string | null;
+        status?: string;
+        submitter_relationship: string;
+        title: string;
+        organizer_name: string;
+        category_slug: string;
+        mode: string;
+        official_url?: string | null;
+        registration_url?: string | null;
+        start_date?: string | null;
+        end_date?: string | null;
+        registration_deadline_precision?: string;
+        registration_deadline_local_date?: string | null;
+        registration_deadline_due_at?: string | null;
+        registration_deadline_timezone?: string | null;
+        venue?: string | null;
+        city?: string | null;
+        state?: string | null;
+        country?: string | null;
+        description?: string | null;
+        eligibility_summary?: string | null;
+        min_team_size?: number | null;
+        max_team_size?: number | null;
+        fee_status?: string;
+        fee_amount?: number | null;
+        currency?: string | null;
+        prize_description?: string | null;
+        submitter_notes?: string | null;
+        rejection_reason_code?: string | null;
+        rejection_reason_details?: string | null;
+        version?: number;
+        created_at?: string;
+        updated_at?: string;
+      };
+      Update: {
+        id?: string;
+        submitter_user_id?: string | null;
+        status?: string;
+        submitter_relationship?: string;
+        title?: string;
+        organizer_name?: string;
+        category_slug?: string;
+        mode?: string;
+        official_url?: string | null;
+        registration_url?: string | null;
+        start_date?: string | null;
+        end_date?: string | null;
+        registration_deadline_precision?: string;
+        registration_deadline_local_date?: string | null;
+        registration_deadline_due_at?: string | null;
+        registration_deadline_timezone?: string | null;
+        venue?: string | null;
+        city?: string | null;
+        state?: string | null;
+        country?: string | null;
+        description?: string | null;
+        eligibility_summary?: string | null;
+        min_team_size?: number | null;
+        max_team_size?: number | null;
+        fee_status?: string;
+        fee_amount?: number | null;
+        currency?: string | null;
+        prize_description?: string | null;
+        submitter_notes?: string | null;
+        rejection_reason_code?: string | null;
+        rejection_reason_details?: string | null;
+        version?: number;
+        created_at?: string;
+        updated_at?: string;
+      };
+      Relationships: [
+        { foreignKeyName: "event_submissions_category_slug_fkey"; columns: ["category_slug"]; isOneToOne: false; referencedRelation: "event_categories"; referencedColumns: ["slug"] },
+      ];
+    };
     event_tags: {
       Row: {
         event_id: string;
@@ -877,6 +990,47 @@ export type Database = { public: {
 
       ];
     };
+    submission_moderation_events: {
+      Row: {
+        id: string;
+        submission_id: string;
+        action: string;
+        actor_id: string | null;
+        actor_role: string;
+        from_status: string | null;
+        to_status: string;
+        public_notes: string | null;
+        internal_notes: string | null;
+        created_at: string;
+      };
+      Insert: {
+        id?: string;
+        submission_id: string;
+        action: string;
+        actor_id?: string | null;
+        actor_role: string;
+        from_status?: string | null;
+        to_status: string;
+        public_notes?: string | null;
+        internal_notes?: string | null;
+        created_at?: string;
+      };
+      Update: {
+        id?: string;
+        submission_id?: string;
+        action?: string;
+        actor_id?: string | null;
+        actor_role?: string;
+        from_status?: string | null;
+        to_status?: string;
+        public_notes?: string | null;
+        internal_notes?: string | null;
+        created_at?: string;
+      };
+      Relationships: [
+        { foreignKeyName: "submission_moderation_events_submission_id_fkey"; columns: ["submission_id"]; isOneToOne: false; referencedRelation: "event_submissions"; referencedColumns: ["id"] },
+      ];
+    };
     sync_runs: {
       Row: {
         id: string;
@@ -995,18 +1149,28 @@ export type Database = { public: {
     };
   };
   Functions: {
+    accept_event_submission: { Args: { p_command: Json }; Returns: Json };
     acquire_runner_lease: { Args: { p_job_name: string; p_owner: string; p_duration_seconds: number }; Returns: boolean };
     claim_email_deliveries: { Args: { p_batch_size: number }; Returns: Json };
     connector_runtime: { Args: { command: Json }; Returns: Json };
+    edit_event_submission: { Args: { p_command: Json }; Returns: Json };
     for_you_candidates: { Args: Record<string, never>; Returns: Json };
+    get_admin_submission: { Args: { p_submission_id: string }; Returns: Json };
+    get_admin_submission_history: { Args: { p_submission_id: string }; Returns: Json };
     get_runner_cursor: { Args: { p_job_name: string }; Returns: Json };
+    list_admin_submissions: { Args: { p_status: string; p_limit: number; p_cursor_created_at: string; p_cursor_id: string }; Returns: Json };
+    list_user_submissions: { Args: { p_limit: number; p_cursor_created_at: string; p_cursor_id: string }; Returns: Json };
     mark_all_notifications_read: { Args: Record<string, never>; Returns: number };
     mark_notification_read: { Args: { p_notification_id: string }; Returns: boolean };
     mutate_event: { Args: { command: Json }; Returns: Json };
+    reject_event_submission: { Args: { p_command: Json }; Returns: Json };
     release_runner_lease: { Args: { p_job_name: string; p_owner: string }; Returns: string };
     save_profile_section: { Args: { section: string; values_json: Json }; Returns: boolean };
     search_published_events: { Args: { filters: Json; page_after: Json }; Returns: Json };
+    start_review_event_submission: { Args: { p_command: Json }; Returns: Json };
+    submit_event_opportunity: { Args: { p_payload: Json }; Returns: Json };
     update_runner_cursor: { Args: { p_job_name: string; p_cursor_timestamp: string; p_cursor_id: string }; Returns: string };
+    withdraw_event_submission: { Args: { p_command: Json }; Returns: Json };
   };
   Enums: { [_ in never]: never };
   CompositeTypes: { [_ in never]: never };

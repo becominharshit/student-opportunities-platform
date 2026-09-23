@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
    <h2 className="text-xl font-semibold mb-4">Notification preferences</h2>
    <NotificationPreferencesForm initialPreferences={prefs} />
  </div>
- <nav aria-label="Account actions" className="flex flex-wrap gap-4 underline"><a href="/notifications" className="underline">Notifications</a><a href="/saved" className="underline">Saved</a><a href="/for-you">For You</a><a href="/account/profile">Edit profile</a><a href="/onboarding">Guided onboarding</a><a href="/explore">Explore opportunities</a></nav>
+ <nav aria-label="Account actions" className="flex flex-wrap gap-4 underline"><a href="/account/submissions" className="underline">Your submissions</a><a href="/submit-event" className="underline">Submit opportunity</a><a href="/notifications" className="underline">Notifications</a><a href="/saved" className="underline">Saved</a><a href="/for-you">For You</a><a href="/account/profile">Edit profile</a><a href="/onboarding">Guided onboarding</a><a href="/explore">Explore opportunities</a></nav>
  <form method="post" action="/auth/logout"><Button type="submit">Sign out</Button></form><a href="/forgot-password" className="block underline">Reset password by email</a><a href="/admin" className="block underline">Administrator access</a>
  </AuthShell>;
 }

@@ -1,0 +1,138 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createRequestSupabaseClient } from "@/lib/supabase/request";
+import { appOrigin } from "@/lib/auth/config";
+import { editSubmission, withdrawSubmission } from "@/lib/submissions/service";
+
+export const dynamic = "force-dynamic";
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const statusMap: Record<string, number> = {
+  unauthorized: 401,
+  forbidden: 403,
+  validation: 422,
+  not_found: 404,
+  rate_limit_exceeded: 429,
+  duplicate_submission: 409,
+  version_conflict: 409,
+  already_accepted: 409,
+  invalid_transition: 422,
+  database_failure: 500,
+};
+
+async function parseBody(request: NextRequest): Promise<{ ok: true; body: Record<string, unknown> } | { ok: false; response: NextResponse }> {
+  const headers = new Headers();
+  headers.set("Cache-Control", "private, no-cache, no-store, max-age=0, must-revalidate");
+
+  // CSRF & Cross-site origin verification
+  const origin = request.headers.get("origin");
+  const secFetchSite = request.headers.get("sec-fetch-site");
+  if (origin !== appOrigin() || secFetchSite === "cross-site") {
+    return { ok: false, response: NextResponse.json({ ok: false, code: "forbidden", message: "Forbidden cross-site request" }, { status: 403, headers }) };
+  }
+
+  // Content type check
+  const contentType = request.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    return { ok: false, response: NextResponse.json({ ok: false, code: "validation", message: "Invalid content type" }, { status: 400, headers }) };
+  }
+
+  // Body size cap: 64 KB
+  const reader = request.body?.getReader();
+  if (!reader) {
+    return { ok: false, response: NextResponse.json({ ok: false, code: "validation", message: "Missing request body" }, { status: 400, headers }) };
+  }
+
+  let size = 0;
+  const chunks: Uint8Array[] = [];
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.length;
+    if (size > 65536) {
+      await reader.cancel();
+      return { ok: false, response: NextResponse.json({ ok: false, code: "validation", message: "Payload size exceeds maximum allowed (64 KB)" }, { status: 413, headers }) };
+    }
+    chunks.push(value);
+  }
+
+  try {
+    const rawText = Buffer.concat(chunks).toString("utf8");
+    return { ok: true, body: JSON.parse(rawText) as Record<string, unknown> };
+  } catch {
+    return { ok: false, response: NextResponse.json({ ok: false, code: "validation", message: "Invalid JSON format" }, { status: 400, headers }) };
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
+  const headers = new Headers();
+  headers.set("Cache-Control", "private, no-cache, no-store, max-age=0, must-revalidate");
+
+  const { id } = await context.params;
+  if (!UUID_REGEX.test(id)) {
+    return NextResponse.json({ ok: false, code: "validation", message: "Invalid submission ID" }, { status: 400, headers });
+  }
+
+  const parsed = await parseBody(request);
+  if (!parsed.ok) return parsed.response;
+
+  const expectedVersion = (parsed.body?.expectedVersion ?? parsed.body?.expected_version) as number | undefined;
+  const patch = parsed.body?.patch as Record<string, unknown> | undefined;
+
+  if (typeof expectedVersion !== "number" || !Number.isInteger(expectedVersion) || expectedVersion < 1) {
+    return NextResponse.json({ ok: false, code: "validation", message: "Missing or invalid expectedVersion" }, { status: 400, headers });
+  }
+
+  const response = NextResponse.json({ ok: false }, { status: 500, headers });
+  const client = createRequestSupabaseClient(request, response);
+
+  const result = await editSubmission(client, id, expectedVersion, patch);
+  if (!result.ok) {
+    const status = statusMap[result.code] || 400;
+    return NextResponse.json(result, { status, headers });
+  }
+
+  return NextResponse.json(result, { status: 200, headers });
+}
+
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
+  const headers = new Headers();
+  headers.set("Cache-Control", "private, no-cache, no-store, max-age=0, must-revalidate");
+
+  const { id } = await context.params;
+  if (!UUID_REGEX.test(id)) {
+    return NextResponse.json({ ok: false, code: "validation", message: "Invalid submission ID" }, { status: 400, headers });
+  }
+
+  const parsed = await parseBody(request);
+  if (!parsed.ok) return parsed.response;
+
+  const action = parsed.body?.action as string | undefined;
+  const expectedVersion = (parsed.body?.expectedVersion ?? parsed.body?.expected_version) as number | undefined;
+  const publicNotes = (parsed.body?.publicNotes ?? parsed.body?.public_notes) as string | undefined;
+
+  if (action !== "withdraw") {
+    return NextResponse.json({ ok: false, code: "validation", message: "Unsupported submission action" }, { status: 400, headers });
+  }
+
+  if (typeof expectedVersion !== "number" || !Number.isInteger(expectedVersion) || expectedVersion < 1) {
+    return NextResponse.json({ ok: false, code: "validation", message: "Missing or invalid expectedVersion" }, { status: 400, headers });
+  }
+
+  const response = NextResponse.json({ ok: false }, { status: 500, headers });
+  const client = createRequestSupabaseClient(request, response);
+
+  const result = await withdrawSubmission(client, id, expectedVersion, publicNotes);
+  if (!result.ok) {
+    const status = statusMap[result.code] || 400;
+    return NextResponse.json(result, { status, headers });
+  }
+
+  return NextResponse.json(result, { status: 200, headers });
+}

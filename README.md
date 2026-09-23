@@ -5,12 +5,14 @@ C04 adds minimal authentication pages, protected account/admin destinations and 
 C05 adds canonical event management; C06 adds public Explore and Event Detail.
 C18 adds complete administrator dashboard and lossless structured event editing.
 Calendar Export adds RFC 5545 `.ics` download and safe Google Calendar prefilled event links.
-Notifications adds in-app notifications (`/notifications`), transactional email transport, hourly deadline reminders, and substantive event changes sweepers.
-No automated source integration, AI, or organizer submissions are implemented.
+Notifications adds in-app notifications (/notifications), transactional email transport, hourly deadline reminders, and substantive event changes sweepers.
+Organizer Submissions adds authenticated event submission (/submit-event), private submitter dashboard (/account/submissions) with withdrawal capability, administrator moderation queue (/admin/submissions), and single-submission review workbench (/admin/submissions/[id]) with duplicate candidate detection and atomic conversion to private canonical event drafts.
+No automated source integration or AI assistant features are implemented.
 Current release: **Manual-Content Product Beta**. See [the implementation roadmap and milestone status](docs/planning/implementation-roadmap.md).
-Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12–C16, C18, and Calendar Export are complete and committed; Notifications is implemented awaiting review.
+Automatic external discovery/sync is **deferred, not completed**; C07 research and C08/C08.5 infrastructure remain preserved. C12–C16, C18, Calendar Export, Notifications, and Organizer Submissions are complete.
 
-See [Notifications review and validation](docs/section-36-notifications-review.md). Exactly one additive migration `20260924000100_notifications.sql` applied. Run `npm run test:notifications`, `npm run test:notifications:performance`, `npm run test:notifications:ui` (Playwright across 320/390/768/1280px), and `npm run test:notifications:hosted` for isolated and hosted checks.
+See [Organizer Submissions review and validation](docs/section-36-organizer-submissions-review.md). Exactly one additive migration `20260924000200_organizer_submissions.sql` applied. Run `npm run test:submissions`, `npm run test:submissions:performance`, `npm run test:submissions:ui` (Playwright across 320/390/768/1280px), and `npm run test:submissions:hosted` for isolated and hosted checks.
+See [Notifications review and validation](docs/section-36-notifications-review.md). Exactly one additive migration `20260924000100_notifications.sql` applied. Run `npm run test:notifications`, `npm run test:notifications:performance`, `npm run test:notifications:ui`, and `npm run test:notifications:hosted`.
 See [Calendar Export review and validation](docs/section-36-calendar-review.md). Zero new database migrations. Run `npm run test:calendar`, `npm run test:calendar:ui`, and `npm run test:calendar:hosted`.
 See [C18 administrator experience review](docs/section-36-c18-review.md). Run `npm run test:admin`, `npm run test:admin:ui`, and `npm run test:admin:hosted`.
 See [C04 authentication setup and review](docs/c04-authentication.md), including required hosted email templates.
