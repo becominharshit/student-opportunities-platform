@@ -13,6 +13,8 @@ export async function loadComponents() {
   // Next Link's router integration is covered on hosted routes; fixture HTML uses native anchors.
   const link = moduleUrl(`import {createElement} from ${JSON.stringify(pathToFileURL(require.resolve("react")).href)}; export default function Link(props){return createElement("a",props);}`);
   let source = await readFile(new URL("../../src/components/public-events.tsx", import.meta.url), "utf8");
+  const saveCode=Buffer.from(moduleUrl(await readFile(new URL("../../src/components/save-control.tsx",import.meta.url),"utf8")).split(",")[1],"base64").toString().replace('"react/jsx-runtime"',JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));
+  source=source.replace('"./save-control"',JSON.stringify("data:text/javascript;base64,"+Buffer.from(saveCode).toString("base64")));
   source = source.replace('"@/lib/events/presentation"', JSON.stringify(format)).replace('"next/link"', JSON.stringify(link));
   let compiled = Buffer.from(moduleUrl(source).split(",")[1], "base64").toString();
   compiled = compiled.replace('"react/jsx-runtime"', JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));

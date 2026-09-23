@@ -1,3 +1,4 @@
+import { loadSaveState } from "@/lib/saves/service";
 import { SearchExploreContent } from "@/components/explore-search";
 import { parseExploreQuery, type QueryInput } from "@/lib/events/explore-query";
 import { searchPublishedEvents } from "@/lib/events/public-search";
@@ -7,7 +8,8 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
   const { filters, warnings, after } = parseExploreQuery(await searchParams);
   const result = await searchPublishedEvents(filters, after);
   if (!result.ok && result.code === "database_failure") throw new Error("Public event catalogue unavailable");
-  return <SearchExploreContent filters={filters} warnings={warnings} after={after}
+  const saveState=await loadSaveState(result.ok?result.value.items.map(e=>e.id):[]);
+  return <SearchExploreContent saveState={saveState} filters={filters} warnings={warnings} after={after}
     items={result.ok ? result.value.items : []} nextCursor={result.ok ? result.value.nextCursor : null}
     invalidCursor={!result.ok} />;
 }

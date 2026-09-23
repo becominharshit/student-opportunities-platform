@@ -1,3 +1,4 @@
+import type { SaveState } from "../lib/saves/policy";
 import Link from "next/link";
 import { DiscoveryShell, EventCard } from "./public-events";
 import { choices, exploreUrl, type ExploreFilters, type FilterKey } from "@/lib/events/explore-query";
@@ -11,8 +12,8 @@ const names: Record<FilterKey, string> = {
 };
 const display = (value: string) => value.replaceAll("_", " ");
 const control = "mt-2 block min-h-11 w-full min-w-0 rounded-md border border-border bg-background px-3 py-2";
-export function SearchExploreContent({ filters, warnings, items, nextCursor, after, invalidCursor = false }: {
-  filters: ExploreFilters; warnings: string[]; items: PublicEventCard[]; nextCursor: string | null; after?: string; invalidCursor?: boolean;
+export function SearchExploreContent({ filters, warnings, items, nextCursor, after, saveState, invalidCursor = false }: {
+  filters: ExploreFilters; warnings: string[]; items: PublicEventCard[]; nextCursor: string | null; after?: string; invalidCursor?: boolean; saveState?:SaveState;
 }) {
   const active = Object.entries(filters).filter(([key, value]) => value && !(key === "sort" && value === "relevance"));
   const constrained = active.some(([key]) => key !== "sort");
@@ -31,7 +32,7 @@ export function SearchExploreContent({ filters, warnings, items, nextCursor, aft
         placeholder={key === "country" ? "e.g. IN" : key === "domain" ? "e.g. robotics" : undefined} />}
     </div>;
   }
-  return <DiscoveryShell>
+  return <DiscoveryShell authenticated={saveState?.kind==="ready"}>
     <h1 className="text-4xl font-semibold">Explore events</h1>
     <p className="mt-4 max-w-2xl text-muted-foreground">Search published student events. Filters describe recorded event information; they do not confirm your eligibility.</p>
     <form action="/explore" method="get" key={exploreUrl(filters)} className="mt-8 space-y-5">
@@ -56,7 +57,7 @@ export function SearchExploreContent({ filters, warnings, items, nextCursor, aft
     </section>
     {invalidCursor ? <section className="my-8"><h2 className="text-2xl font-semibold">This page link is invalid or belongs to another search</h2><Link href={exploreUrl(filters)} className="mt-3 inline-flex min-h-11 items-center underline">Return to first results</Link></section> : <>
       <p role="status" className="mt-8">{items.length} opportunities on this page{nextCursor ? " · More results available" : ""}</p>
-      {items.length ? <ul className="mt-5 grid gap-x-10 md:grid-cols-2">{items.map(event => <li key={event.id} className="min-w-0"><EventCard event={event} /></li>)}</ul> :
+      {items.length ? <ul className="mt-5 grid gap-x-10 md:grid-cols-2">{items.map(event => <li key={event.id} className="min-w-0"><EventCard event={event} saveState={saveState} returnTo={exploreUrl(filters,after)} /></li>)}</ul> :
         <section className="my-8 border-y border-border py-8"><h2 className="text-2xl font-semibold">{after ? "No more results on this page" : constrained ? "No events match these filters" : "No published opportunities are available yet"}</h2><p className="mt-3">{constrained ? "Try fewer filters or another search term. Missing facts are not inferred." : "Events will appear after administrator review and publication."}</p></section>}
       <nav aria-label="Event pages" className="mt-8 flex flex-wrap justify-between gap-4">
         {after && <Link href={exploreUrl(filters)} className="inline-flex min-h-11 items-center underline">Back to first page</Link>}

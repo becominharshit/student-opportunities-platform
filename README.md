@@ -162,7 +162,7 @@ completion guidance. This is one bounded set, not whole-catalogue match paginati
 The additive `20260923000100_c15_for_you.sql` migration is already applied and
 hosted-verified; do not reapply it. No environment changes or dependencies are needed.
 See [C15 review](docs/section-36-c15-review.md) for ranking, privacy, local performance,
-validation and exact hosted cleanup. C15 is complete and review-approved; C16 has not started.
+validation and exact hosted cleanup. C15 is complete and review-approved; C16 is implemented, awaiting review.
 
 ```sh
 npm run test:for-you
@@ -174,4 +174,31 @@ npm run test:for-you:hosted
 UI tests require a build. Performance fixtures remain isolated in embedded PostgreSQL.
 Hosted verification uses genuine empty event inventory and exactly two temporary Auth
 accounts, then deletes those accounts/dependent rows. Results stay in ignored `work/c15`.
-No hosted events or sources are seeded. C15 review is approved; do not begin C16 automatically.
+No hosted events or sources are seeded. C15 review is approved; C16 status is recorded below.
+
+
+## C16 review checkpoint
+
+Private bookmarks now work across Explore, Event Detail and For You. `/saved` uses
+24-item timestamp/UUID keyset pagination and published-only public card projections.
+One shared same-origin POST behavior derives identity server-side and uses ordinary
+RLS. Saves are idempotent; hidden event details never appear through Saved.
+
+The existing C03 table/policies are reused. The additive
+`20260923000200_c16_saved_order.sql` ordering index is already applied; all nine
+migration versions match. No new environment variables or dependencies are required.
+Do not reapply the migration. See [C16 review](docs/section-36-c16-review.md) for
+schema, pagination, query plans, validation, hosted limitations and exact cleanup.
+
+```sh
+npm run test:saves
+npm run test:saves:performance
+npm run test:saves:ui
+npm run test:saves:hosted
+```
+
+Build before UI tests. Performance/populated browser fixtures run only in isolated
+PostgreSQL. Hosted verification creates/deletes exactly two temporary Auth accounts
+and uses genuine empty inventory; it does not seed hosted events. Results remain in
+ignored `work/c16`. C16 awaits review; do not commit/push or begin C18/calendar/
+notifications automatically. C09–C11/C17 remain DEFERRED.

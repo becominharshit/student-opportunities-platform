@@ -44,6 +44,7 @@ export async function searchFixtures() {
   ui=ui.replace('"./public-events"',JSON.stringify(componentsUrl)).replace('"@/lib/events/explore-query"',JSON.stringify(queryUrl)).replace('"next/link"',JSON.stringify(linkUrl));
   const uiUrl=compileJSX(ui);
   let route=await readFile(new URL("../../src/app/explore/page.tsx",import.meta.url),"utf8");
+  route=route.replace('"@/lib/saves/service"',JSON.stringify(moduleUrl('export const loadSaveState=async()=>({kind:"anonymous"});')));
   route=route.replace('"@/components/explore-search"',JSON.stringify(uiUrl)).replace('"@/lib/events/explore-query"',JSON.stringify(queryUrl)).replace('"@/lib/events/public-search"',JSON.stringify(apiUrl));
   return {...base,query,api,ui:await import(uiUrl),route:(await import(compileJSX(route))).default,
     search:async(input={},after)=>api.searchPublishedEvents(query.parseExploreQuery(input).filters,after),

@@ -38,7 +38,7 @@ These are recorded prior results, not fresh production verification performed in
 
 ## Current implementation order
 
-C12/C12.5 are complete and committed/pushed in `d5b0d0434d57c867ac062dba05a7bad245b4067c`; their migration/hosted sign-off is recorded in `../c125-hosted-verification.md`. C13 is complete, approved and committed/pushed in `3b6e7f62f39936aafa6bc6c8197c5f8431bf5c69`. C14 is complete — review approved; see `../section-36-c14-review.md`. C15 is complete — review approved; see `../section-36-c15-review.md`. C16 and subsequent product work are NOT STARTED. C14 is committed/pushed as `e7ddee75d136a34e2fb9f21f119ff59c5cb9737f`. C15 review is approved and commit/push is authorized. The deferred source sequence below is unchanged. Codex owns implementation and verification; the project owner supplies provider/deployment configuration where required. These are ordered work items, not concurrent assignments or calendar promises.
+C12/C12.5 are complete and committed/pushed in `d5b0d0434d57c867ac062dba05a7bad245b4067c`; their migration/hosted sign-off is recorded in `../c125-hosted-verification.md`. C13 is complete, approved and committed/pushed in `3b6e7f62f39936aafa6bc6c8197c5f8431bf5c69`. C14 is complete — review approved; see `../section-36-c14-review.md`. C15 is complete — review approved; see `../section-36-c15-review.md`. C16 is implemented — awaiting review; see `../section-36-c16-review.md`. C18 and subsequent product work are NOT STARTED. C14 is committed/pushed as `e7ddee75d136a34e2fb9f21f119ff59c5cb9737f`. C15 is committed/pushed as `3132e259e4929603cc75dc3c21c532e0c184c872`. C16 must not be committed/pushed before review approval. The deferred source sequence below is unchanged. Codex owns implementation and verification; the project owner supplies provider/deployment configuration where required. These are ordered work items, not concurrent assignments or calendar promises.
 
 | Order | Task | Active dependency and completion scope |
 |---|---|---|
@@ -82,7 +82,7 @@ Original milestone IDs remain visible so deferred work cannot be mistaken for co
 | M1 — Foundation | COMPLETE — recorded | Existing C01–C04 sign-offs; preserve working auth/database/access controls |
 | M2 — Event vertical slice | IMPLEMENTATION COMPLETE; hosted content QA pending | C05/C06 preserved; genuine hosted published-event journey must be verified by C21 |
 | M3 — First ingestion slice | **DEFERRED; not complete** | C07 research/C08 infrastructure/C08.5 verification complete within scope; live C09/C10 still deferred |
-| M4 — Discovery and relevance | IN PROGRESS; C12 approved with C12.5 hosted sign-off | C12 migration applied and hosted empty-inventory/API/UI checks passed; C13–C15 complete and review-approved; C16 not started. Stop after the approved C15 commit/push |
+| M4 — Discovery and relevance | IN PROGRESS; C12 approved with C12.5 hosted sign-off | C12 migration applied and hosted empty-inventory/API/UI checks passed; C13–C15 complete and review-approved; C16 implemented awaiting review. Stop before C18 |
 | M5a — Manual-content operations and presentation | NOT STARTED | C18 → C19; usable protected admin and finished public experience |
 | M5b — External-source coverage and operations | **DEFERRED; not complete** | C11/C17 after deployment; 5–8 approved sources and operational evidence still required later |
 | Product features originally V0.2 | NOT STARTED; required before M6 | Google Calendar → .ics → notifications → grounded AI → organizer submissions |

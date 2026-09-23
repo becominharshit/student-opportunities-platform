@@ -1,5 +1,8 @@
 // Only implemented internal destinations are accepted, including after decoding.
 export function safeDestination(value: unknown): string {
+  if(typeof value==="string"&&value.length<=2048&&!/[\\\u0000-\u001f\u007f]/.test(value)&&value.startsWith("/")&&!value.startsWith("//")){
+    try{const url=new URL(value,"https://internal.invalid");if(url.origin==="https://internal.invalid"&&!url.hash&&(url.pathname==="/explore"||url.pathname==="/saved"||(/^\/events\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(url.pathname)&&!url.search)))return value;}catch{}
+  }
   return typeof value === "string" && ["/for-you", "/admin", "/account/profile", "/onboarding"].includes(value) ? value : "/account";
 }
 
