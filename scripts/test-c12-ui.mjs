@@ -27,7 +27,7 @@ try {
  await mkdir("work/c12",{recursive:true});
  for(const width of [320,390,768,1280]){
   await page.setViewportSize({width,height:900});await page.goto(origin+"/explore");
-  await page.getByText("Filters and sorting",{exact:true}).click();
+  await page.locator(".filter-panel > summary").click();
   await page.getByLabel("Participation mode",{exact:true}).waitFor({state:"visible"});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),width+" no horizontal overflow");
   await page.getByLabel("Participation mode",{exact:true}).selectOption("online");
@@ -35,7 +35,7 @@ try {
   await page.getByRole("button",{name:"Apply filters",exact:true}).click();
   assert.equal(await page.locator("article").count(),1);assert.match(page.url(),/mode=online/);assert.match(page.url(),/country=IN/);
   await page.reload();assert.equal(await page.locator("article").count(),1);
-  await page.getByText(/Filters and sorting/).click();
+  await page.locator(".filter-panel > summary").click();
   assert.equal(await page.getByLabel("Participation mode",{exact:true}).inputValue(),"online");
   if(width===390)await page.screenshot({path:"work/c12/filters-mobile.png",fullPage:true});
   await page.getByRole("link",{name:"Clear all filters",exact:true}).click();
@@ -48,8 +48,8 @@ try {
  await page.keyboard.press("Tab");assert.equal(await page.locator(":focus").textContent(),"Skip to content");
  await page.keyboard.press("Enter");await page.keyboard.press("Tab");assert.equal(await page.locator(":focus").getAttribute("name"),"q");
  await page.keyboard.type("python");await page.keyboard.press("Enter");await page.waitForURL(/q=python/);assert.equal(await page.locator("article").count(),1);
- await page.getByText(/Filters and sorting/).focus();await page.keyboard.press("Enter");
- assert.equal(await page.locator("details").getAttribute("open"),"");
+ await page.locator(".filter-panel > summary").focus();await page.keyboard.press("Enter");
+ assert.equal(await page.locator(".filter-panel").getAttribute("open"),"");
  await page.keyboard.press("Tab");assert.equal(await page.locator(":focus").getAttribute("name"),"category");
  const focus=await page.locator(":focus").evaluate(e=>({style:getComputedStyle(e).outlineStyle,width:getComputedStyle(e).outlineWidth}));
  assert.notEqual(focus.style,"none");assert.ok(parseFloat(focus.width)>=2);

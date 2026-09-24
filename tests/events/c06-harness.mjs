@@ -8,12 +8,20 @@ export const moduleUrl = source => "data:text/javascript;base64," + Buffer.from(
 export async function loadPresentation() {
   return import(moduleUrl(await readFile(new URL("../../src/lib/events/presentation.ts", import.meta.url), "utf8")));
 }
+export async function disclosureModuleUrl() {
+  const source = await readFile(new URL("../../src/components/ui/responsive-disclosure.tsx", import.meta.url), "utf8");
+  const compiled = Buffer.from(moduleUrl(source).split(",")[1], "base64").toString()
+    .replace('"react/jsx-runtime"', JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href))
+    .replace('"react"', JSON.stringify(pathToFileURL(require.resolve("react")).href));
+  return "data:text/javascript;base64," + Buffer.from(compiled).toString("base64");
+}
 export async function loadComponents() {
   const format = moduleUrl(await readFile(new URL("../../src/lib/events/presentation.ts", import.meta.url), "utf8"));
   // Next Link's router integration is covered on hosted routes; fixture HTML uses native anchors.
   const link = moduleUrl(`import {createElement} from ${JSON.stringify(pathToFileURL(require.resolve("react")).href)}; export default function Link(props){return createElement("a",props);}`);
   let source = await readFile(new URL("../../src/components/public-events.tsx", import.meta.url), "utf8");
   const saveCode=Buffer.from(moduleUrl(await readFile(new URL("../../src/components/save-control.tsx",import.meta.url),"utf8")).split(",")[1],"base64").toString().replace('"react/jsx-runtime"',JSON.stringify(pathToFileURL(require.resolve("react/jsx-runtime")).href));
+  source=source.replace('"./ui/responsive-disclosure"',JSON.stringify(await disclosureModuleUrl()));
   source=source.replace('"./save-control"',JSON.stringify("data:text/javascript;base64,"+Buffer.from(saveCode).toString("base64")));
   const calCode=Buffer.from(moduleUrl(await readFile(new URL("../../src/lib/events/calendar.ts",import.meta.url),"utf8")).split(",")[1],"base64").toString();
   const calUrl="data:text/javascript;base64,"+Buffer.from(calCode).toString("base64");

@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
-import { fixtures, fixtureId, moduleUrl, loadComponents } from "./c06-harness.mjs";
+import { fixtures, fixtureId, moduleUrl, loadComponents, disclosureModuleUrl } from "./c06-harness.mjs";
 const require = createRequire(import.meta.url);
 export async function searchFixtures() {
   const base = await fixtures();
@@ -41,6 +41,7 @@ export async function searchFixtures() {
     return "data:text/javascript;base64,"+Buffer.from(compiled).toString("base64");
   }
   let ui=await readFile(new URL("../../src/components/explore-search.tsx",import.meta.url),"utf8");
+  ui=ui.replace('"./ui/responsive-disclosure"',JSON.stringify(await disclosureModuleUrl()));
   ui=ui.replace('"./public-events"',JSON.stringify(componentsUrl)).replace('"@/lib/events/explore-query"',JSON.stringify(queryUrl)).replace('"next/link"',JSON.stringify(linkUrl));
   const uiUrl=compileJSX(ui);
   let route=await readFile(new URL("../../src/app/explore/page.tsx",import.meta.url),"utf8");

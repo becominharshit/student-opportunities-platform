@@ -7,10 +7,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:opacity-90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
         outline: "border border-border bg-background text-foreground hover:bg-muted",
       },
-      size: { default: "h-10 px-4 py-2", sm: "h-9 px-3" },
+      size: { default: "min-h-11 px-4 py-2", sm: "min-h-11 px-3" },
     },
     defaultVariants: { variant: "default", size: "default" },
   },

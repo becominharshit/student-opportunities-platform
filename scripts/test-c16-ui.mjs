@@ -7,14 +7,14 @@ import {chromium} from '@playwright/test';
 import {NextRequest} from 'next/server.js';
 import {fixture,A} from '../tests/saves/harness.mjs';
 import {load,moduleUrl,profile,event} from '../tests/recommendations/harness.mjs';
-import {loadComponents} from '../tests/events/c06-harness.mjs';
+import {loadComponents,disclosureModuleUrl} from '../tests/events/c06-harness.mjs';
 let f,browser,server;
 try{
  f=await fixture();const components=await loadComponents();globalThis.__c16UI=components;globalThis.__c16UIClient=f.client;
  const publicModule=moduleUrl('export const DiscoveryShell=globalThis.__c16UI.DiscoveryShell;export const EventCard=globalThis.__c16UI.EventCard;');
  const link=moduleUrl(`import {createElement} from ${JSON.stringify(import.meta.resolve('react'))};export default function Link(props){return createElement('a',props);}`);
  const query=await import(await load('src/lib/events/explore-query.ts'));
- const {SearchExploreContent}=await import(await load('src/components/explore-search.tsx',{'./public-events':publicModule,'next/link':link,'@/lib/events/explore-query':await load('src/lib/events/explore-query.ts')}));
+ const {SearchExploreContent}=await import(await load('src/components/explore-search.tsx',{'./ui/responsive-disclosure':await disclosureModuleUrl(),'./public-events':publicModule,'next/link':link,'@/lib/events/explore-query':await load('src/lib/events/explore-query.ts')}));
  const {ForYouContent}=await import(await load('src/components/for-you.tsx',{'./public-events':publicModule}));
  const {SavedContent}=await import(await load('src/components/saved-events.tsx',{'./public-events':publicModule}));
  const {EventPersonalization}=await import(await load('src/components/event-personalization.tsx'));
