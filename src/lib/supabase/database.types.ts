@@ -1151,6 +1151,7 @@ export type Database = { public: {
   Functions: {
     accept_event_submission: { Args: { p_command: Json }; Returns: Json };
     acquire_runner_lease: { Args: { p_job_name: string; p_owner: string; p_duration_seconds: number }; Returns: boolean };
+    claim_assistant_request: { Args: Record<string, never>; Returns: Json };
     claim_email_deliveries: { Args: { p_batch_size: number }; Returns: Json };
     connector_runtime: { Args: { command: Json }; Returns: Json };
     edit_event_submission: { Args: { p_command: Json }; Returns: Json };
@@ -1164,6 +1165,7 @@ export type Database = { public: {
     mark_notification_read: { Args: { p_notification_id: string }; Returns: boolean };
     mutate_event: { Args: { command: Json }; Returns: Json };
     reject_event_submission: { Args: { p_command: Json }; Returns: Json };
+    release_assistant_request: { Args: { p_lease_id: string }; Returns: boolean };
     release_runner_lease: { Args: { p_job_name: string; p_owner: string }; Returns: string };
     save_profile_section: { Args: { section: string; values_json: Json }; Returns: boolean };
     search_published_events: { Args: { filters: Json; page_after: Json }; Returns: Json };

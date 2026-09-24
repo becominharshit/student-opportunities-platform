@@ -11,7 +11,7 @@
     "db:start": "supabase start",
     "db:types": "node scripts/generate-db-types.mjs",
     "test:bundle": "node scripts/check-client-bundle.mjs",
-    "test": "node --test tests/database/c03.test.mjs tests/security.test.mjs tests/auth.test.mjs tests/auth-handlers.test.mjs tests/events/c05.test.mjs tests/events/c06.test.mjs tests/connectors/c08.test.mjs tests/events/c12.test.mjs tests/profiles/c13.test.mjs tests/profiles/handler.test.mjs tests/recommendations/c14.test.mjs tests/recommendations/service.test.mjs tests/for-you/c15.test.mjs tests/saves/c16.test.mjs tests/admin/c18.test.mjs tests/calendar/calendar.test.mjs tests/notifications/notifications.test.mjs tests/submissions/submissions.test.mjs",
+    "test": "node --test tests/database/c03.test.mjs tests/security.test.mjs tests/auth.test.mjs tests/auth-handlers.test.mjs tests/events/c05.test.mjs tests/events/c06.test.mjs tests/connectors/c08.test.mjs tests/events/c12.test.mjs tests/profiles/c13.test.mjs tests/profiles/handler.test.mjs tests/recommendations/c14.test.mjs tests/recommendations/service.test.mjs tests/for-you/c15.test.mjs tests/saves/c16.test.mjs tests/admin/c18.test.mjs tests/calendar/calendar.test.mjs tests/notifications/notifications.test.mjs tests/submissions/submissions.test.mjs tests/assistant/assistant.test.mjs",
     "test:boundary": "node scripts/test-server-boundary.mjs",
     "db:types:check": "node scripts/generate-db-types.mjs --check",
     "db:reset:local": "supabase db reset --local",
@@ -51,7 +51,11 @@
     "test:submissions": "node --test tests/submissions/submissions.test.mjs",
     "test:submissions:ui": "node scripts/test-submissions-ui.mjs",
     "test:submissions:hosted": "node scripts/verify-submissions-hosted.mjs",
-    "test:submissions:performance": "node scripts/explain-submissions.mjs"
+    "test:submissions:performance": "node scripts/explain-submissions.mjs",
+    "test:assistant": "node --test tests/assistant/assistant.test.mjs",
+    "test:assistant:ui": "node scripts/test-assistant-ui.mjs",
+    "test:assistant:hosted": "node scripts/verify-assistant-hosted.mjs",
+    "test:assistant:performance": "node scripts/explain-assistant.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
